@@ -15,6 +15,15 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 
+# Auto-completion and navigation
+zstyle ':completion:*' menu select
+zmodload zsh/complist
+bindkey -M menuselect '^[[D' vi-backward-char
+bindkey -M menuselect '^[[A' vi-up-line-or-history
+bindkey -M menuselect '^[[C' vi-forward-char
+bindkey -M menuselect '^[[B' vi-down-line-or-history
+# End of auto-completion
+
 # PS1
 setopt PROMPT_SUBST
 ps1ret() {
@@ -33,3 +42,4 @@ alias g=git
 alias ls='ls --color=auto -F'
 alias l='ls'
 alias ll='ls -lh'
+# End of aliases
