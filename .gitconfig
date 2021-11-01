@@ -1,0 +1,16 @@
+[user]
+	email = rafaelkperes@gmail.com
+	name = Rafael Koch Peres
+[core]
+	editor = vim
+[alias]
+	s = status
+	l = log --oneline
+	ls = l -n=5
+	br = branch
+	ci = commit
+	co = checkout
+	f = fetch
+	m = merge
+	rb = rebase
+	st = stash
