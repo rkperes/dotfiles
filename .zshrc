@@ -30,7 +30,10 @@ _comp_options+=(globdots) # Include hidden files.
 [ -f "$HOME/.config/shortcutrc" ] && source "$HOME/.config/shortcutrc"
 [ -f "$HOME/.config/aliasrc" ] && source "$HOME/.config/aliasrc"
 
-# https://getantibody.github.io/
+# source antidote (https://github.com/mattmc3/antidote)
+source ${ZDOTDIR:-~}/.antidote/antidote.zsh
+# initialize plugins statically with ${ZDOTDIR:-~}/.zsh_plugins.txt
+antidote load
 source ~/.zsh_plugins.sh
 
 #zsh-history-substring-search key bindings
