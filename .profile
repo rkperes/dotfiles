@@ -7,11 +7,12 @@ if [ -d "$HOME/.local/bin" ]; then
     export PATH="$HOME/.local/bin:$PATH"
 fi
 
-export GOPATH="$HOME/SAPDevelop/go"
-export GOPRIVATE='github.wdf.sap.corp/*'
-export VFLOWPATH="$GOPATH/src/github.wdf.sap.corp/velocity/vflow"
-export VSOLUTIONPATH="$GOPATH/src/github.wdf.sap.corp/velocity/vsolution"
+export GOROOT="/usr/local/go"
+if [ -d "$GOROOT/bin" ]; then
+    export PATH="$GOROOT/bin:$PATH"
+fi
 
+export GOPATH="$HOME/go"
 if [ -d "$GOPATH/bin" ]; then
     export PATH="$GOPATH/bin:$PATH"
 fi
