@@ -34,13 +34,11 @@ _comp_options+=(globdots) # Include hidden files.
 source ${ZDOTDIR:-~}/.antidote/antidote.zsh
 # initialize plugins statically with ${ZDOTDIR:-~}/.zsh_plugins.txt
 antidote load
-source ~/.zsh_plugins.sh
 
 #zsh-history-substring-search key bindings
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 eval "$(gh completion -s zsh)"
-source ~/.zsh_plugins.sh
 
 # -------------------------------------
 # python ------------------------------
