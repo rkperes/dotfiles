@@ -31,14 +31,19 @@ _comp_options+=(globdots) # Include hidden files.
 [ -f "$HOME/.config/aliasrc" ] && source "$HOME/.config/aliasrc"
 
 # source antidote (https://github.com/mattmc3/antidote)
-source ${ZDOTDIR:-~}/.antidote/antidote.zsh
+#source ${ZDOTDIR:-~}/.antidote/antidote.zsh
+# with `brew install antidote`
+source $(brew --prefix)/opt/antidote/share/antidote/antidote.zsh
 # initialize plugins statically with ${ZDOTDIR:-~}/.zsh_plugins.txt
 antidote load
 
 #zsh-history-substring-search key bindings
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
-eval "$(gh completion -s zsh)"
+
+if command -v gh 1>/dev/null 2>&1; then
+  eval "$(gh completion -s zsh)"
+fi
 
 # -------------------------------------
 # python ------------------------------
