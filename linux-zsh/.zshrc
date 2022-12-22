@@ -50,10 +50,10 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 [ -f "$HOME/.config/aliasrc" ] && source "$HOME/.config/aliasrc"
 
 # source antidote (https://github.com/mattmc3/antidote)
-if [ ! -f "${ZDOTDIR:-~}/.antidote/antidote.zsh" ]; then
+if [ ! -f "$HOME/.antidote/antidote.zsh" ]; then
   ## install if not present
   echo 'installing antidote...'
-  git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
+  git clone --depth=1 https://github.com/mattmc3/antidote.git $HOME/.antidote
   echo 'antidote installed'
 fi
 
