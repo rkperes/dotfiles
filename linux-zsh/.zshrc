@@ -44,14 +44,20 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
+
 # Load aliases and shortcuts if existent.
 [ -f "$HOME/.config/shortcutrc" ] && source "$HOME/.config/shortcutrc"
 [ -f "$HOME/.config/aliasrc" ] && source "$HOME/.config/aliasrc"
 
 # source antidote (https://github.com/mattmc3/antidote)
-#source ${ZDOTDIR:-~}/.antidote/antidote.zsh
-# with `brew install antidote`
-source $(brew --prefix)/opt/antidote/share/antidote/antidote.zsh
+if [ ! -f "${ZDOTDIR:-~}/.antidote/antidote.zsh" ]; then
+  ## install if not present
+  echo 'installing antidote...'
+  git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
+  echo 'antidote installed'
+fi
+
+source ${ZDOTDIR:-~}/.antidote/antidote.zsh
 # initialize plugins statically with ${ZDOTDIR:-~}/.zsh_plugins.txt
 antidote load
 

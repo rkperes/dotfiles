@@ -1,0 +1,26 @@
+# ls aliases
+alias ls='ls -G'
+alias ll='ls -lh'
+alias la='ls -A'
+alias l='ls -CF'
+
+# watch
+# https://unix.stackexchange.com/questions/25327/watch-command-alias-expansion
+alias watch='watch '
+
+# git
+alias g='git'
+
+# docker
+alias d='docker'
+alias dps="docker ps --format 'table {{ \"\x1b[33;1m$\x1b[0m\" }} {{ .ID }} \t {{ printf \"%.15s\" .Names }} \t {{ printf \"%.15s\" .Image }} \t {{.Status}} \t {{.Ports}}'"
+
+# kubernetes
+alias k='kubectl'
+alias kcfg='$HOME/sh/kcfg_load.sh'
+alias klvflow='$HOME/sh/kctl_vflow_logs.sh'
+alias kctx='k config use-content'
+alias kns='k config set-context --current --namespace'
+alias kgp='k get po'
+alias kgpf='k get po | grep pipeline'
+alias kgpg='k get po | grep graph'
