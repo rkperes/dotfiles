@@ -3,8 +3,6 @@ autoload promptinit
 
 setopt histignorealldups sharehistory
 
-PROMPT="%B%{$fg[magenta]%}%1~ %(?.%{$fg_bold[green]%}.%{$fg_bold[red]%})$%{$reset_color%}%b "
-
 # Enable colors and change prompt:
 autoload -U colors && colors
 
@@ -66,6 +64,8 @@ bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 bindkey "$terminfo[kcuu1]" history-substring-search-up
 bindkey "$terminfo[kcud1]" history-substring-search-down
+
+PROMPT="%B%{$fg[magenta]%}%1~ %(?.%{$fg_bold[green]%}.%{$fg_bold[red]%})$%{$reset_color%}%b "
 
 # -------------------------------------
 # github ------------------------------
