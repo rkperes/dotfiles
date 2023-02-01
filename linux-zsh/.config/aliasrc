@@ -24,3 +24,14 @@ alias kns='k config set-context --current --namespace'
 alias kgp='k get po'
 alias kgpf='k get po | grep pipeline'
 alias kgpg='k get po | grep graph'
+
+### Uber stuff
+## upanel
+alias up='cd $UPANEL'
+alias ub='(cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && make build)'
+alias ur='(trap "kill 0" SIGINT; cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make wonka >> /tmp/wonka.log 2>&1 & make run)'
+alias ud='(trap "kill 0" SIGINT; cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make wonka >> /tmp/wonka.log 2>&1 & make debug)'
+ 
+## devpod
+alias dp='devpod'
+alias sshdp='ssh rkochp.devpod-bra'
