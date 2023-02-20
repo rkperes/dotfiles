@@ -31,6 +31,7 @@ alias up='cd $UPANEL'
 alias ub='(cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && make build)'
 alias ur='(trap "kill 0" SIGINT; cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make wonka >> /tmp/wonka.log 2>&1 & make run)'
 alias ud='(trap "kill 0" SIGINT; cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make wonka >> /tmp/wonka.log 2>&1 & make debug)'
+alias updb='(trap "kill 0" SIGINT; echo "starting cerberus" && cerberus -s grail-deployment-storage --no-status-page >> /tmp/cerberus.log 2>&1 & sleep 10 && storage credential -t soadbmysql -i recon1 -d recon1 && echo "" && $GOMONOREPO/src/code.uber.internal/infra/soadbmysql/scripts/tunnel_for_cluster.sh recon1 primary)'
  
 ## devpod
 alias dp='devpod'
