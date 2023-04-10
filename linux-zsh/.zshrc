@@ -66,6 +66,11 @@ bindkey "$terminfo[kcuu1]" history-substring-search-up
 bindkey "$terminfo[kcud1]" history-substring-search-down
 
 PROMPT="%B%{$fg[magenta]%}%1~ %(?.%{$fg_bold[green]%}.%{$fg_bold[red]%})$%{$reset_color%}%b "
+# https://github.com/spaceship-prompt/spaceship-prompt
+if [ ! -d ~/.zsh/spaceship ]; then
+  mkdir -p "$HOME/.zsh" && git clone --depth=1 https://github.com/spaceship-prompt/spaceship-prompt.git "$HOME/.zsh/spaceship"
+fi
+source "$HOME/.zsh/spaceship/spaceship.zsh"
 
 # -------------------------------------
 # github ------------------------------
