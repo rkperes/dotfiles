@@ -1,0 +1,12 @@
+---
+#schema_version: 0
+shell: zsh
+
+repositories:
+  - dest: /home/user/rkperes/config
+    repo: https://github.com/rkperes/config
+
+tasks:
+  - name: install config
+    command: cd /home/user/rkperes/config/linux-zsh && sh install.sh
+    when: on-create,on-restart
