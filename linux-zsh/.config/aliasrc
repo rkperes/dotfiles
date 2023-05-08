@@ -36,3 +36,8 @@ alias updb='(trap "kill 0" SIGINT; echo "starting cerberus" && cerberus -s grail
 ## devpod
 alias dp='devpod'
 alias sshdp='ssh rkochp.devpod-bra'
+
+## cadence
+alias cadence='cadence --address 127.0.0.1:5436 --env docstore-staging --domain upanel-staging --proxy_region dca'
+alias cadps='cadence listall'
+alias cadobs='cadence workflow observe --workflow_id'
