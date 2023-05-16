@@ -27,3 +27,9 @@ if [ -f "$HOME/.cargo/env" ]; then
     . "$HOME/.cargo/env"
 fi
 
+# uber
+export GOMONOREPO="$HOME/Uber/go-code-sparse"
+export MONOREPO_BASE=$GOMONOREPO
+export UPANEL="$GOMONOREPO/src/code.uber.internal/people/talent/upanel"
+export SCOUTHIRE="$GOMONOREPO/src/code.uber.internal/people/scout-hire"
+export DEVPOD_NAME="rkochp.devpod-bra"
