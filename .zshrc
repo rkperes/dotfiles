@@ -1,4 +1,3 @@
-# Based on https://gist.github.com/LukeSmithxyz/e62f26e55ea8b0ed41a65912fbebbe52
 autoload promptinit
 
 setopt histignorealldups sharehistory
@@ -24,13 +23,33 @@ zmodload zsh/complist
 compinit -u
 _comp_options+=(globdots) # Include hidden files.
 
+#PROMPT="%B%{$fg[magenta]%}%1~ %(?.%{$fg_bold[green]%}.%{$fg_bold[red]%})$%{$reset_color%}%b "
+
+if ! type "starship" > /dev/null; then
+    if type "brew" > /dev/null; then
+        echo "brew install starship"
+        brew install starship
+    else
+        echo "install starship"
+        curl -sS https://starship.rs/install.sh | sh
+    fi
+fi
+# requires NerdFont
+eval "$(starship init zsh)"
+
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' format 'Completing %d'
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' menu select=2
-eval "$(dircolors -b)"
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+if whence dircolors >/dev/null; then
+  eval "$(dircolors -b)"
+  zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+  alias ls='ls --color'
+else
+  export CLICOLOR=1
+  zstyle ':completion:*:default' list-colors ''
+fi
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
 zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
@@ -47,17 +66,26 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 [ -f "$HOME/.config/aliasrc" ] && source "$HOME/.config/aliasrc"
 
 # source antidote (https://github.com/mattmc3/antidote)
-#source ${ZDOTDIR:-~}/.antidote/antidote.zsh
-# with `brew install antidote`
-source $(brew --prefix)/opt/antidote/share/antidote/antidote.zsh
+if type "brew" > /dev/null; then
+    if [ ! -f $(brew --prefix)/opt/antidote/share/antidote/antidote.zsh ]; then
+        echo "brew install antidote"
+        brew install antidote
+    fi
+    source $(brew --prefix)/opt/antidote/share/antidote/antidote.zsh
+else
+    if [ ! -f ${ZDOTDIR:-~}/.antidote/antidote.zsh ]; then
+        echo "clone antidote"
+        git clone --depth=1 https://github.com/mattmc3/antidote.git ${ZDOTDIR:-~}/.antidote
+    fi
+
+    source ${ZDOTDIR:-~}/.antidote/antidote.zsh
+fi
 # initialize plugins statically with ${ZDOTDIR:-~}/.zsh_plugins.txt
 antidote load
 
 #zsh-history-substring-search key bindings
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
-
-PROMPT="%B%{$fg[magenta]%}%1~ %(?.%{$fg_bold[green]%}.%{$fg_bold[red]%})$%{$reset_color%}%b "
 
 # -------------------------------------
 # github ------------------------------
@@ -86,3 +114,4 @@ function set-kubeconfig {
 }
 set-kubeconfig;
 add-zsh-hook precmd set-kubeconfig
+

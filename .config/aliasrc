@@ -1,3 +1,5 @@
+alias nv=nvim
+
 # ls aliases
 alias ls='ls -G'
 alias ll='ls -lh'
