@@ -7,7 +7,7 @@ set -e
 #------------------------------------------------------------------------------#
 dir=.dotfiles
 echo "> Downloading dotfiles to $dir..."
-git clone --quiet --bare https://github.com/rkperes/dotfiles "$HOME/$dir"
+git clone --quiet --bare git@github.com:rkperes/dotfiles.git "$HOME/$dir"
 cmd() { git --git-dir="$HOME/$dir" --work-tree="$HOME" "$@"; }
 
 #------------------------------------------------------------------------------#
