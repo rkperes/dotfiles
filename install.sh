@@ -14,10 +14,8 @@ cmd() { git --git-dir="$HOME/$dir" --work-tree="$HOME" "$@"; }
 # Backup already existing dotfiles
 #------------------------------------------------------------------------------#
 files=($(cmd ls-tree -r HEAD | awk '{print $NF}'))
-echo $files
 bkp=.dotfiles.backup
 for f in "${files[@]}"; do
-    echo $f
   # File at root ==> back up file
   if [[ $(basename "$f") = "$f" ]]; then
     [[ -f "$HOME/$f" ]] && mkdir -p "$HOME/$bkp" && mv "$HOME/$f" "$HOME/$bkp" && echo "> Backing up: $f ==> $bkp/$f"
