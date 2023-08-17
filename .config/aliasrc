@@ -50,4 +50,5 @@ alias shdb='(trap "kill 0" SIGINT; echo "starting cerberus" && cerberus -s grail
 
 ## devpod
 alias dp='devpod'
-alias sshdp='ssh rkochp.devpod-bra'
+alias dpgo='ssh $DEVPOD_GO'
+alias dpweb='ssh $DEVPOD_WEB'
