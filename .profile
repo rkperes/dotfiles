@@ -28,7 +28,7 @@ if [ -f "$HOME/.cargo/env" ]; then
 fi
 
 # uber
-export GOMONOREPO="$HOME/Uber/go-code-sparse"
+export GOMONOREPO="$HOME/go-code"
 export MONOREPO_BASE=$GOMONOREPO
 export WORKSPACE_ROOT=$GOMONOREPO
 export UPANEL="$GOMONOREPO/src/code.uber.internal/people/talent/upanel"
