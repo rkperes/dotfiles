@@ -37,8 +37,8 @@ alias ut='(cd $UPANEL && make test)'
 alias urr='(trap "kill 0" SIGINT; cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make wonka >> /tmp/wonka.log 2>&1 & wait)'
 alias ur='(trap "kill 0" SIGINT; cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make wonka >> /tmp/wonka.log 2>&1 & make MONOREPO_BASE=$GOMONOREPO run)'
 alias ud='(trap "kill 0" SIGINT; cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make wonka >> /tmp/wonka.log 2>&1 & make MONOREPO_BASE=$GOMONOREPO debug)'
-alias updb='(trap "kill 0" SIGINT; echo "starting cerberus" && cerberus -s grail-deployment-storage --no-status-page >> /tmp/cerberus.log 2>&1 & sleep 10 && storage credential -t soadbmysql -i recon1 -d recon1 && echo "" && $GOMONOREPO/src/code.uber.internal/infra/soadbmysql/scripts/tunnel_for_cluster.sh recon1 primary)'
-alias updbprod='(trap "kill 0" SIGINT; echo "starting cerberus" && cerberus -s grail-deployment-storage --no-status-page >> /tmp/cerberus.log 2>&1 & sleep 10 && storage credential -t soadbmysql -i recon -d recon && echo "" && $GOMONOREPO/src/code.uber.internal/infra/soadbmysql/scripts/tunnel_for_cluster.sh recon primary)'
+alias updbstag='dbt recon1 primary 17031'
+alias updbprod='dbt recon primary 17030'
 
 ## scout-hire
 alias cdsh='cd $SCOUTHIRE'
@@ -46,7 +46,11 @@ alias shb='(cd $SCOUTHIRE && make build)'
 alias sht='(cd $SCOUTHIRE && make test)'
 alias shrr='(trap "kill 0" SIGINT; cd $SCOUTHIRE && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & wait)'
 alias shr='(trap "kill 0" SIGINT; cd $SCOUTHIRE && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make run)'
-alias shdb='(trap "kill 0" SIGINT; echo "starting cerberus" && cerberus -s grail-deployment-storage --no-status-page >> /tmp/cerberus.log 2>&1 & sleep 10 && storage credential -t soadbmysql -i scout_hire_experimental -d scout_hire_experimental && echo "" && $GOMONOREPO/src/code.uber.internal/infra/soadbmysql/scripts/tunnel_for_cluster.sh scout_hire_experimental primary)'
+alias shdbexp='dbt scout_hire_experimental primary 17027'
+alias shdbstag='dbt scout_staging primary 17026'
+alias shdbprod='dbt scout_hire_prod2 primary 17025'
+
+alias dbcred='echo storage credential -t soadbmysql -i ${DB:-scout_hire_experimental} -d ${DB:-scout_hire_experimental}; storage credential -t soadbmysql -i ${DB:-scout_hire_experimental} -d ${DB:-scout_hire_experimental}'
 
 ## devpod
 alias dp='devpod'
