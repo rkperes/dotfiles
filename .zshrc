@@ -115,3 +115,21 @@ function set-kubeconfig {
 set-kubeconfig;
 add-zsh-hook precmd set-kubeconfig
 
+# -------------------------------------
+# uber --------------------------------
+TUNNEL_FOR_CLUSTER="$GOMONOREPO/src/code.uber.internal/infra/soadbmysql/scripts/tunnel_for_cluster.sh"
+dbt () {
+  (
+    trap "kill 0" SIGINT
+    echo "usage dbt <db> <role> <port>"
+    DB="${1-scout_hire_prod2}"
+    ROLE="${2-primary}"
+    PORT="${3-17025}"
+    echo "Connecting to DB: ${DB} as ROLE: ${ROLE} on PORT: ${PORT}"
+    cerberus -s grail-deployment-storage --no-status-page --quiet &
+    sleep 15 
+    $TUNNEL_FOR_CLUSTER $DB $ROLE $PORT
+    echo "all done"
+  )
+}
+
