@@ -145,3 +145,9 @@ if [ ! $(nvim -v 2>&1 | sed -n '/^NVIM v0\.[0-8]/p' 2>&1 | wc -l) -eq 0 ]; then
   fi
 fi
 
+
+# -------------------------------------
+# nvim Uber ---------------------------
+if [ -d ~/go-code ] && [ ! -f ~/.go-code/.envrc.local ]; then
+  cp ~/.envrc.local.go-code ~/.go-code/.envrc.local
+fi
