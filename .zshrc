@@ -127,7 +127,7 @@ add-zsh-hook precmd set-kubeconfig
 # nvim --------------------------------
 
 # install locally (overrides) if nvim <= v0.8
-if [ $(nvim -v 2>&1 | sed -n '/^NVIM v0\.[0-8]/p' 2>&1 | wc -l) -eq 0 ]; then 
+if [ ! $(nvim -v 2>&1 | sed -n '/^NVIM v0\.[0-8]/p' 2>&1 | wc -l) -eq 0 ]; then 
   if isBrew; then
     echo "brew install nvim"
     brew install nvim
