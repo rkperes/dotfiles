@@ -1,3 +1,5 @@
+vim.env.PATH = vim.env.VIM_PATH or vim.env.PATH
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   -- bootstrap lazy.nvim
