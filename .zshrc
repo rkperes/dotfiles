@@ -123,3 +123,23 @@ function set-kubeconfig {
 set-kubeconfig;
 add-zsh-hook precmd set-kubeconfig
 
+# -------------------------------------
+# nvim --------------------------------
+
+# install locally (overrides) if nvim <= v0.8
+if [ $(nvim -v 2>&1 | sed -n '/^NVIM v0\.[0-8]/p' 2>&1 | wc -l) -eq 0 ]; then 
+  if isBrew; then
+    echo "brew install nvim"
+    brew install nvim
+  else
+    echo "install nvim-linux64"
+  (
+    mkdir -p ~/tmp && cd ~/tmp && \
+    wget "https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz" && \
+    tar xzf nvim-linux64.tar.gz && \
+    mkdir -p ~/.local && mv nvim-linux64 ~/.local/nvim && \
+    mkdir -p ~/.local/bin && cd ~/.local/bin && ln -s nvim $HOME/.local/nvim/bin/nvim
+  )
+  fi
+fi
+
