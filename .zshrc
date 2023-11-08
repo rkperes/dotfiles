@@ -25,8 +25,16 @@ _comp_options+=(globdots) # Include hidden files.
 
 #PROMPT="%B%{$fg[magenta]%}%1~ %(?.%{$fg_bold[green]%}.%{$fg_bold[red]%})$%{$reset_color%}%b "
 
+function isMac() {
+  [ "$(uname)" = "Darwin" ]
+}
+
+function isBrew() {
+  isMac && type "brew" > /dev/null
+}
+
 if ! type "starship" > /dev/null; then
-    if type "brew" > /dev/null; then
+    if isBrew; then
         echo "brew install starship"
         brew install starship
     else
@@ -66,7 +74,7 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 [ -f "$HOME/.config/aliasrc" ] && source "$HOME/.config/aliasrc"
 
 # source antidote (https://github.com/mattmc3/antidote)
-if type "brew" > /dev/null; then
+if isBrew; then
     if [ ! -f $(brew --prefix)/opt/antidote/share/antidote/antidote.zsh ]; then
         echo "brew install antidote"
         brew install antidote
