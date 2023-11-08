@@ -138,7 +138,7 @@ if [ ! $(nvim -v 2>&1 | sed -n '/^NVIM v0\.[0-8]/p' 2>&1 | wc -l) -eq 0 ]; then
     wget "https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz" && \
     tar xzf nvim-linux64.tar.gz && \
     mkdir -p ~/.local && mv nvim-linux64 ~/.local/nvim && \
-    mkdir -p ~/.local/bin && cd ~/.local/bin && ln -s nvim $HOME/.local/nvim/bin/nvim
+    mkdir -p ~/.local/bin && cd ~/.local/bin && ln -s $HOME/.local/nvim/bin/nvim nvim
   )
   fi
 fi
