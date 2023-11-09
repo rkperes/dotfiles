@@ -150,3 +150,21 @@ fi
 if [ -f ~/.envrc.local.go-code ] && [ -d ~/go-code ] && [ ! -f ~/go-code/.envrc.local ]; then
   cp ~/.envrc.local.go-code ~/go-code/.envrc.local
 fi
+
+
+# -------------------------------------
+# database tunnel ---------------------
+dbt () {
+	(
+		trap "kill 0" SIGINT
+		echo "usage dbt <db> <role> <port>"
+		DB="${1-scout_hire_prod2}"
+		ROLE="${2-primary}"
+		PORT="${3-17025}"
+		echo "Connecting to DB: ${DB} as ROLE: ${ROLE} on PORT: ${PORT}"
+		cerberus -s grail-deployment-storage --no-status-page --quiet &
+		sleep 15
+		$TUNNEL_FOR_CLUSTER $DB $ROLE $PORT
+		echo "all done"
+	)
+}
