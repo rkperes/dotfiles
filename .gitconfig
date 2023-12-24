@@ -17,4 +17,5 @@
 	m = merge
 	rb = rebase
 	st = stash
+	cp = cherry-pick 
 
