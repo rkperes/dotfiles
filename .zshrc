@@ -168,3 +168,9 @@ dbt () {
 		echo "all done"
 	)
 }
+
+
+# -------------------------------------
+# fix gdate Uber ---------------------
+[ -r "${HOME}"/.profile_lda ] && . "${HOME}"/.profile_lda
+
