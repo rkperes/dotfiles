@@ -154,6 +154,7 @@ fi
 
 # -------------------------------------
 # database tunnel ---------------------
+TUNNEL_FOR_CLUSTER=$HOME/go-code/src/code.uber.internal/infra/soadbmysql/scripts/tunnel_for_cluster.sh 
 dbt () {
 	(
 		trap "kill 0" SIGINT
