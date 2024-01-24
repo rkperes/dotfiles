@@ -9,7 +9,7 @@ dir=.dotfiles
 echo "> Downloading dotfiles to $dir..."
 
 REPOSITORY="https://github.com/rkperes/dotfiles.git"
-if [[ ! -z $USE_GIT_SSH ]]; then
+if [[ ! -z ${USE_GIT_SSH} ]]; then
   REPOSITORY="git@github.com:rkperes/dotfiles.git"
 fi
 git clone --quiet --bare $REPOSITORY --branch "${DOTFILES_BRANCH:-main}" "$HOME/$dir"
