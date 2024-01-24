@@ -7,7 +7,12 @@ set -e
 #------------------------------------------------------------------------------#
 dir=.dotfiles
 echo "> Downloading dotfiles to $dir..."
-git clone --quiet --bare git@github.com:rkperes/dotfiles.git --branch "${DOTFILES_BRANCH:-main}" "$HOME/$dir"
+
+REPOSITORY="https://github.com/rkperes/dotfiles.git"
+if [[ ! -z $USE_GIT_SSH ]]; then
+  REPOSITORY="git@github.com:rkperes/dotfiles.git"
+fi
+git clone --quiet --bare $REPOSITORY --branch "${DOTFILES_BRANCH:-main}" "$HOME/$dir"
 cmd() { git --git-dir="$HOME/$dir" --work-tree="$HOME" "$@"; }
 
 #------------------------------------------------------------------------------#
