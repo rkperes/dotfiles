@@ -3,16 +3,14 @@
 set -e
 
 #------------------------------------------------------------------------------#
-# Download
+# Setup
 #------------------------------------------------------------------------------#
 dir=.dotfiles
-echo "> Downloading dotfiles to $dir..."
 
 REPOSITORY="https://github.com/rkperes/dotfiles.git"
 if [ -n ${USE_GIT_SSH+1} ]; then
   REPOSITORY="git@github.com:rkperes/dotfiles.git"
 fi
-git clone --quiet --bare $REPOSITORY --branch "${DOTFILES_BRANCH:-main}" "$HOME/$dir"
 cmd() { git --git-dir="$HOME/$dir" --work-tree="$HOME" "$@"; }
 
 #------------------------------------------------------------------------------#
@@ -35,11 +33,15 @@ for f in "${files[@]}"; do
 done
 
 #------------------------------------------------------------------------------#
-# Install
+# Download & Install
 #------------------------------------------------------------------------------#
+echo "> Downloading dotfiles to $dir..."
+git clone --quiet --bare $REPOSITORY --branch "${DOTFILES_BRANCH:-main}" "$HOME/$dir"
+
+echo "> Installing..."
 cmd checkout
 cmd submodule --quiet init
 cmd submodule --quiet update
 cmd config status.showUntrackedFiles no
-echo "> Success! The following dotfiles have been installed to $HOME:"
+ "> Success! The following dotfiles have been installed to $HOME:"
 printf '    %s\n' "${files[@]}"
