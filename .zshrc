@@ -162,6 +162,7 @@ dbt () {
 		DB="${1-scout_hire_prod2}"
 		ROLE="${2-primary}"
 		PORT="${3-17025}"
+		storage credential -t soadbmysql -i ${DB} -d ${DB}
 		echo "Connecting to DB: ${DB} as ROLE: ${ROLE} on PORT: ${PORT}"
 		cerberus -s grail-deployment-storage --no-status-page --quiet &
 		sleep 15
