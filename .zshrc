@@ -12,6 +12,11 @@ SAVEHIST=10000
 setopt notify
 unsetopt beep
 bindkey -e
+
+# alt/opt and cmd moving
+bindkey "^[[1;3C" forward-word
+bindkey "^[[1;3D" backward-word
+
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/rkperes/.zshrc'
@@ -171,6 +176,11 @@ dbt () {
 	)
 }
 
+# -------------------------------------
+# direnv ------------------------------
+if type "direnv" > /dev/null; then
+  eval "$(direnv hook zsh)"
+fi
 
 # -------------------------------------
 # fix gdate Uber ---------------------
