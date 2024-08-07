@@ -54,3 +54,8 @@ alias shdbprod='dbt scout_hire_prod2'
 alias dp='devpod'
 alias dpgo='ssh $DEVPOD_GO'
 alias dpweb='ssh $DEVPOD_WEB'
+
+## bazel
+alias bz='bazel'
+alias bzt='bz test'
+alias bztv='bzt --test_output=all --test_summary=detailed --cache_test_results=false --test_arg=-test.v'
