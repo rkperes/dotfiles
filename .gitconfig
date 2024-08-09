@@ -17,5 +17,7 @@
 	m = merge
 	rb = rebase
 	st = stash
-	cp = cherry-pick 
+	cp = cherry-pick
+[farc "upload"]
+    add-repo-prefix = false
 
