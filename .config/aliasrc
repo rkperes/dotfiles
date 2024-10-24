@@ -29,6 +29,12 @@ alias kgp='k get po'
 alias kgpf='k get po | grep pipeline'
 alias kgpg='k get po | grep graph'
 
+# ssh+tmux
+# This required xclip (and maybe xsel) installed.
+# It also requires running 'ssh -Y ...' to forward X11.
+# The tmux config should already copy using xsel+xclip, so these are required on the client, too.
+alias x2pb='xclip -o -selection clipboard | pbcopy'
+
 # Uber
 ## upanel
 alias cdup='cd $UPANEL'
@@ -52,6 +58,8 @@ alias shdbprod='dbt scout_hire_prod2'
 
 ## devpod
 alias dp='devpod'
+alias dpgo='ssh -Y $DEVPOD_GO'
+alias dpweb='ssh -Y $DEVPOD_WEB'
 alias dpgo='ssh $DEVPOD_GO'
 alias dpweb='ssh $DEVPOD_WEB'
 
