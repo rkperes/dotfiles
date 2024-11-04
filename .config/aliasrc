@@ -60,8 +60,6 @@ alias shdbprod='dbt scout_hire_prod2'
 alias dp='devpod'
 alias dpgo='ssh -Y $DEVPOD_GO'
 alias dpweb='ssh -Y $DEVPOD_WEB'
-alias dpgo='ssh $DEVPOD_GO'
-alias dpweb='ssh $DEVPOD_WEB'
 
 ## bazel
 alias bz='bazel'
