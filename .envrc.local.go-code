@@ -1,6 +1,8 @@
 GOPACKAGESDRIVER=$GOPATH/tools/ide/managed_gopadrv.sh
-
 export GOPACKAGESDRIVER
+
+GOPACKAGESDRIVER_ULSP_MODE=true
+export GOPACKAGESDRIVER_ULSP_MODE
 
 if bazel_out=$(readlink bazel-out); then
         go_bin=${bazel_out%%/execroot*}/external/go_sdk/bin
