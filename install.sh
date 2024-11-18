@@ -14,12 +14,6 @@ fi
 cmd() { git --git-dir="$HOME/$dir" --work-tree="$HOME" "$@"; }
 
 #------------------------------------------------------------------------------#
-# Download
-#------------------------------------------------------------------------------#
-echo "> Downloading dotfiles to $dir..."
-git clone --quiet --bare $REPOSITORY --branch "${DOTFILES_BRANCH:-main}" "$HOME/$dir"
-
-#------------------------------------------------------------------------------#
 # Backup already existing dotfiles
 #------------------------------------------------------------------------------#
 files=($(cmd ls-tree -r HEAD | awk '{print $NF}'))
@@ -39,8 +33,11 @@ for f in "${files[@]}"; do
 done
 
 #------------------------------------------------------------------------------#
-# Install
+# Download & Install
 #------------------------------------------------------------------------------#
+echo "> Downloading dotfiles to $dir..."
+git clone --quiet --bare $REPOSITORY --branch "${DOTFILES_BRANCH:-main}" "$HOME/$dir"
+
 echo "> Installing..."
 cmd checkout
 cmd submodule --quiet init
