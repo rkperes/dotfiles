@@ -38,6 +38,7 @@ done
 echo "> Downloading dotfiles to $dir..."
 git clone --quiet --bare $REPOSITORY --branch "${DOTFILES_BRANCH:-main}" "$HOME/$dir"
 
+
 echo "> Installing..."
 cmd checkout
 cmd submodule --quiet init
