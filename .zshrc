@@ -12,6 +12,11 @@ SAVEHIST=10000
 setopt notify
 unsetopt beep
 bindkey -e
+
+# alt/opt and cmd moving
+bindkey "^[[1;3C" forward-word
+bindkey "^[[1;3D" backward-word
+
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/rkperes/.zshrc'
@@ -129,19 +134,55 @@ add-zsh-hook precmd set-kubeconfig
 # nvim --------------------------------
 
 # install locally (overrides) if nvim <= v0.8
-if [ ! $(nvim -v 2>&1 | sed -n '/^NVIM v0\.[0-8]/p' 2>&1 | wc -l) -eq 0 ]; then 
-  if isBrew; then
-    echo "brew install nvim"
-    brew install nvim
-  else
-    echo "install nvim-linux64"
-  (
-    mkdir -p ~/tmp && cd ~/tmp && \
-    wget "https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz" && \
-    tar xzf nvim-linux64.tar.gz && \
-    mkdir -p ~/.local && mv nvim-linux64 ~/.local/nvim && \
-    mkdir -p ~/.local/bin && cd ~/.local/bin && ln -s $HOME/.local/nvim/bin/nvim nvim
-  )
-  fi
+# if [ ! $(nvim -v 2>&1 | sed -n '/^NVIM v0\.([0-8]/p' 2>&1 | wc -l) -eq 0 ]; then 
+#   if isBrew; then
+#     echo "brew install nvim"
+#     brew install nvim
+#   else
+#     echo "install nvim-linux64"
+#   (
+#     mkdir -p ~/tmp && cd ~/tmp && \
+#     wget "https://github.com/neovim/neovim/releases/download/stable/nvim-linux64.tar.gz" && \
+#     tar xzf nvim-linux64.tar.gz && \
+#     mkdir -p ~/.local && mv nvim-linux64 ~/.local/nvim && \
+#     mkdir -p ~/.local/bin && cd ~/.local/bin && ln -s $HOME/.local/nvim/bin/nvim nvim
+#   )
+#   fi
+# fi
+
+# -------------------------------------
+# nvim Uber ---------------------------
+if [ -f ~/.envrc.local.go-code ] && [ -d ~/go-code ] && [ ! -f ~/go-code/.envrc.local ]; then
+  cp ~/.envrc.local.go-code ~/go-code/.envrc.local
 fi
+
+
+# -------------------------------------
+# database tunnel ---------------------
+TUNNEL_FOR_CLUSTER=$HOME/go-code/src/code.uber.internal/infra/soadbmysql/scripts/tunnel_for_cluster.sh 
+dbt () {
+	(
+		trap "kill 0" SIGINT
+		echo "usage dbt <db> <role> <port>"
+		DB="${1-scout_hire_prod2}"
+		ROLE="${2-primary}"
+		PORT="${3-17025}"
+		storage credential -t soadbmysql -i ${DB} -d ${DB}
+		echo "Connecting to DB: ${DB} as ROLE: ${ROLE} on PORT: ${PORT}"
+		cerberus -s grail-deployment-storage --no-status-page --quiet &
+		sleep 15
+		$TUNNEL_FOR_CLUSTER $DB $ROLE $PORT
+		echo "all done"
+	)
+}
+
+# -------------------------------------
+# direnv ------------------------------
+if type "direnv" > /dev/null; then
+  eval "$(direnv hook zsh)"
+fi
+
+# -------------------------------------
+# fix gdate Uber ---------------------
+[ -r "${HOME}"/.profile_lda ] && . "${HOME}"/.profile_lda
 

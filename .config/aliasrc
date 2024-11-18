@@ -28,3 +28,40 @@ alias kns='k config set-context --current --namespace'
 alias kgp='k get po'
 alias kgpf='k get po | grep pipeline'
 alias kgpg='k get po | grep graph'
+
+# ssh+tmux
+# This required xclip (and maybe xsel) installed.
+# It also requires running 'ssh -Y ...' to forward X11.
+# The tmux config should already copy using xsel+xclip, so these are required on the client, too.
+alias x2pb='xclip -o -selection clipboard | pbcopy'
+
+# Uber
+## upanel
+alias cdup='cd $UPANEL'
+alias upb='(cd $UPANEL && make build)'
+alias upt='(cd $UPANEL && make test)'
+alias uprr='(trap "kill 0" SIGINT; cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make wonka >> /tmp/wonka.log 2>&1 & wait)'
+alias upr='(trap "kill 0" SIGINT; cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make wonka >> /tmp/wonka.log 2>&1 & make MONOREPO_BASE=$GOMONOREPO run)'
+alias upd='(trap "kill 0" SIGINT; cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make wonka >> /tmp/wonka.log 2>&1 & make MONOREPO_BASE=$GOMONOREPO debug)'
+alias updbstag='dbt recon1 primary 17031'
+alias updbprod='dbt recon primary 17030'
+
+## scout-hire
+alias cdsh='cd $SCOUTHIRE'
+alias shb='(cd $SCOUTHIRE && make build)'
+alias sht='(cd $SCOUTHIRE && make test)'
+alias shrr='(trap "kill 0" SIGINT; cd $SCOUTHIRE && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & wait)'
+alias shr='(trap "kill 0" SIGINT; cd $SCOUTHIRE && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make run)'
+alias shdbexp='dbt scout_hire_experimental primary 17027'
+alias shdbstag='dbt scout_staging primary 17026'
+alias shdbprod='dbt scout_hire_prod2'
+
+## devpod
+alias dp='devpod'
+alias dpgo='ssh -Y $DEVPOD_GO'
+alias dpweb='ssh -Y $DEVPOD_WEB'
+
+## bazel
+alias bz='bazel'
+alias bzt='bz test'
+alias bztv='bzt --test_output=all --test_summary=detailed --cache_test_results=false --test_arg=-test.v'
