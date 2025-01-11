@@ -150,6 +150,15 @@ fi
 # nvim Uber ---------------------------
 if [ -f ~/.envrc.local.go-code ] && [ -d ~/go-code ] && [ ! -f ~/go-code/.envrc.local ]; then
   cp ~/.envrc.local.go-code ~/go-code/.envrc.local
->>>>>>> c099d95 (Fix neovim version autoinstall for 0.10)
 fi
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+# bun completions
+[ -s "/Users/rkperes/.bun/_bun" ] && source "/Users/rkperes/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
