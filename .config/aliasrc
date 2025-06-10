@@ -56,6 +56,12 @@ alias shdbexp='dbt scout_hire_experimental primary 17027'
 alias shdbstag='dbt scout_staging primary 17026'
 alias shdbprod='dbt scout_hire_prod2'
 
+## web
+alias cdsf='cd $SCOUTFUSION'
+alias cdcf='cd $CAREERSFUSION'
+alias jzf='jz focus'
+alias jzd='jz dev'
+
 ## devpod
 alias dp='devpod'
 alias dpgo='ssh -Y $DEVPOD_GO'
