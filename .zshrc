@@ -160,7 +160,7 @@ fi
 
 # -------------------------------------
 # database tunnel ---------------------
-TUNNEL_FOR_CLUSTER=$HOME/go-code/src/code.uber.internal/infra/soadbmysql/scripts/tunnel_for_cluster.sh 
+TUNNEL_FOR_CLUSTER=$HOME/tunnel_for_cluster.sh 
 dbt () {
 	(
 		trap "kill 0" SIGINT
@@ -170,8 +170,8 @@ dbt () {
 		PORT="${3-17025}"
 		storage credential -t soadbmysql -i ${DB} -d ${DB}
 		echo "Connecting to DB: ${DB} as ROLE: ${ROLE} on PORT: ${PORT}"
-		cerberus -s grail-deployment-storage --no-status-page --quiet &
-		sleep 15
+		# cerberus -s grail-deployment-storage --no-status-page --quiet &
+		# sleep 15
 		$TUNNEL_FOR_CLUSTER $DB $ROLE $PORT
 		echo "all done"
 	)
