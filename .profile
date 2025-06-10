@@ -35,3 +35,7 @@ export UPANEL="$GOMONOREPO/src/code.uber.internal/people/talent/upanel"
 export SCOUTHIRE="$GOMONOREPO/src/code.uber.internal/people/scout-hire"
 export DEVPOD_GO="rkochp-go.devpod-bra"
 export DEVPOD_WEB="rkochp-web.devpod-bra"
+
+if [ -f "$HOME/.envsecrets" ]; then
+    . "$HOME/.envsecrets"
+fi
