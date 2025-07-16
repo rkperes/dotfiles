@@ -6,6 +6,8 @@
 PLUGIN_DIR="$CONFIG_DIR/plugins"
 ITEMS_DIR="$CONFIG_DIR/items"
 
+FONT="Hack Nerd Font"
+
 source "$HOME/.config/sketchybar/colors.sh" # Loads all defined colors
 source "$HOME/.config/sketchybar/icons.sh" # Loads all defined icons
 
@@ -35,19 +37,28 @@ sketchybar --bar \
 default=(
   padding_left=5
   padding_right=5
-  icon.font="Hack Nerd Font:Bold:12.0"
-  label.font="Hack Nerd Font:Bold:10.0"
-  icon.color=0xffffffff
-  label.color=0xffffffff
+  icon.font="$FONT:Bold:12.0"
+  label.font="$FONT:Bold:10.0"
+  icon.color=${LIGHTGREY}
+  label.color=${LIGHTGREY}
   icon.padding_left=2
   icon.padding_right=2
   label.padding_left=2
   label.padding_right=2
+  popup.background.border_width=1                   
+  popup.background.corner_radius=2
+  popup.background.border_color=$POPUP_BORDER_COLOR
+  popup.background.color=$POPUP_BACKGROUND_COLOR
+  popup.background.shadow.drawing=$SHADOW
 )
 sketchybar --default "${default[@]}"
 
 # Left
+source "$ITEMS_DIR/apple.sh"
 source "$ITEMS_DIR/aerospace.sh"
+
+# Right
+source "$ITEMS_DIR/reload.sh"
 
 ##### Adding Right Items #####
 # In the same way as the left items we can add items to the right side.
