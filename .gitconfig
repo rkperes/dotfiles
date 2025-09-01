@@ -5,6 +5,7 @@
 	editor = vim
 [alias]
 	s = status
+	ss = s -uno 
 	l = log --pretty=format:'%C(bold yellow)%h%Creset %Cgreen%ad %C(bold)(%ar) %Creset%s %Cblue(%an)' --date=short
 	ls = l -n5
 	lg1 = log --graph --abbrev-commit --decorate --format=format:'%C(bold yelow)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)' --all
@@ -12,12 +13,19 @@
 	lg = lg1
 	br = branch
 	ci = commit
+	cia = commit --amend --no-edit
 	co = checkout
+	a = add
+	aa = add -A :/
 	f = fetch
 	m = merge
 	rb = rebase
+	rbc = rebase --continue
+	rbm = rebase -i origin/main
 	st = stash
-	cp = cherry-pick 
+	cp = cherry-pick
+	cpc = cp --continue 
+	ama = !git aa && git cia
 [http "https://gopkg.uberinternal.com"]
 	followRedirects = true
 [http "https://gopkg.in"]
