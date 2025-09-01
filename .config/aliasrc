@@ -34,4 +34,3 @@ alias kgpg='k get po | grep graph'
 # It also requires running 'ssh -Y ...' to forward X11.
 # The tmux config should already copy using xsel+xclip, so these are required on the client, too.
 alias x2pb='xclip -o -selection clipboard | pbcopy'
-

@@ -145,6 +145,11 @@ if [ ! $(nvim -v 2>&1 | sed -n '/^NVIM v0\.[2-9]/p' 2>&1 | wc -l) -eq 0 ]; then
   fi
 fi
 
+# opencode
+if [ -d "$HOME/.opencode/bin" ]; then
+	export PATH=$HOME/.opencode/bin:$PATH
+fi
+
 # -------------------------------------
 # js ----------------------------------
 export NVM_DIR="$HOME/.nvm"
