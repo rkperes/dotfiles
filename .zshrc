@@ -127,7 +127,6 @@ add-zsh-hook precmd set-kubeconfig
 
 # -------------------------------------
 # nvim --------------------------------
-
 # install locally (overrides) if nvim <= v0.9
 if [ ! $(nvim -v 2>&1 | sed -n '/^NVIM v0\.[2-9]/p' 2>&1 | wc -l) -eq 0 ]; then 
   if isBrew; then
@@ -147,11 +146,7 @@ if [ ! $(nvim -v 2>&1 | sed -n '/^NVIM v0\.[2-9]/p' 2>&1 | wc -l) -eq 0 ]; then
 fi
 
 # -------------------------------------
-# nvim Uber ---------------------------
-if [ -f ~/.envrc.local.go-code ] && [ -d ~/go-code ] && [ ! -f ~/go-code/.envrc.local ]; then
-  cp ~/.envrc.local.go-code ~/go-code/.envrc.local
-fi
-
+# js ----------------------------------
 export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
@@ -162,3 +157,6 @@ export NVM_DIR="$HOME/.nvm"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Uber
+[ ! -z "$UBER_LDAP_UID" ] && [ -f $HOME/.uberrc ] && source "$HOME/.uberrc"

@@ -1,0 +1,111 @@
+#!/bin/zsh
+
+
+#################
+####   env   ####
+#################
+
+export DEVPOD_GO="rkochp-go.devpod-bra"
+export DEVPOD_WEB="rkochp-web.devpod-bra"
+
+if [ -d "$HOME/go-code" ]; then
+    export GOMONOREPO="$HOME/go-code"
+    export MONOREPO_BASE=$GOMONOREPO
+    export WORKSPACE_ROOT=$GOMONOREPO
+    export UPANEL="$GOMONOREPO/src/code.uber.internal/people/talent/upanel"
+    export SCOUTHIRE="$GOMONOREPO/src/code.uber.internal/people/scout-hire"
+    export CAREERS="$GOMONOREPO/src/code.uber.internal/people/careers"
+fi
+
+if [ -d "$HOME/web-code" ]; then
+    export WEBMONOREPO="$HOME/web-code"
+    export MONOREPO_BASE=$WEBMONOREPO
+    export WORKSPACE_ROOT=$WEBMONOREPO
+    export UPANELWEB="$WEBMONOREPO/src/platform/people/talent/upanel-web"
+    export SCOUTFUSION="$WEBMONOREPO/src/platform/people/talent/scout-fusion"
+    export CAREERSFUSION="$WEBMONOREPO/src/platform/people/talent/careers-fusion"
+fi
+
+
+#################
+#### aliases ####
+#################
+
+## upanel
+alias cdup='cd $UPANEL'
+alias upb='(cd $UPANEL && make build)'
+alias upt='(cd $UPANEL && make test)'
+alias uprr='(trap "kill 0" SIGINT; cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make wonka >> /tmp/wonka.log 2>&1 & wait)'
+alias upr='(trap "kill 0" SIGINT; cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make wonka >> /tmp/wonka.log 2>&1 & make MONOREPO_BASE=$GOMONOREPO run)'
+alias upd='(trap "kill 0" SIGINT; cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make wonka >> /tmp/wonka.log 2>&1 & make MONOREPO_BASE=$GOMONOREPO debug)'
+alias updbstag='dbt recon1 primary 17031'
+alias updbprod='dbt recon primary 17030'
+
+## scout-hire
+alias cdsh='cd $SCOUTHIRE'
+alias shb='(cd $SCOUTHIRE && make build)'
+alias sht='(cd $SCOUTHIRE && make test)'
+alias shrr='(trap "kill 0" SIGINT; cd $SCOUTHIRE && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & wait)'
+alias shr='(trap "kill 0" SIGINT; cd $SCOUTHIRE && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make run)'
+alias shdbexp='dbt scout_hire_experimental primary 17027'
+alias shdbstag='dbt scout_staging primary 17026'
+alias shdbprod='dbt scout_hire_prod2'
+
+## web
+alias cdsf='cd $SCOUTFUSION'
+alias cdcf='cd $CAREERSFUSION'
+alias jzf='jz focus'
+alias jzd='jz dev'
+
+## devpod
+alias dp='devpod'
+alias dpgo='ssh -Y $DEVPOD_GO'
+alias dpweb='ssh -Y $DEVPOD_WEB'
+
+## bazel
+alias bz='bazel'
+alias bzt='bz test'
+alias bztv='bzt --test_output=all --test_summary=detailed --cache_test_results=false --test_arg=-test.v'
+
+
+################
+#### config ####
+################
+
+git config --global user.name "rkochp"
+git config --global user.email "rkochp@ext.uber.com"
+
+# -------------------------------------
+# nvim Uber ---------------------------
+if [ -f ~/.envrc.local.go-code ] && [ -d ~/go-code ] && [ ! -f ~/go-code/.envrc.local ]; then
+  cp ~/.envrc.local.go-code ~/go-code/.envrc.local
+fi
+
+# -------------------------------------
+# database tunnel ---------------------
+TUNNEL_FOR_CLUSTER=$HOME/tunnel_for_cluster.sh 
+dbt () {
+	(
+		trap "kill 0" SIGINT
+		echo "usage dbt <db> <role> <port>"
+		DB="${1-scout_hire_prod2}"
+		ROLE="${2-primary}"
+		PORT="${3-17025}"
+		storage credential -t soadbmysql -i ${DB} -d ${DB}
+		echo "Connecting to DB: ${DB} as ROLE: ${ROLE} on PORT: ${PORT}"
+		# cerberus -s grail-deployment-storage --no-status-page --quiet &
+		# sleep 15
+		$TUNNEL_FOR_CLUSTER $DB $ROLE $PORT
+		echo "all done"
+	)
+}
+
+# -------------------------------------
+# direnv ------------------------------
+if type "direnv" > /dev/null; then
+  eval "$(direnv hook zsh)"
+fi
+
+# -------------------------------------
+# fix gdate Uber ---------------------
+[ -r "${HOME}"/.profile_lda ] && . "${HOME}"/.profile_lda
