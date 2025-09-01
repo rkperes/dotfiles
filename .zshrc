@@ -17,6 +17,7 @@ bindkey -e
 zstyle :compinstall filename '/home/rkperes/.zshrc'
 
 # Basic auto/tab complete:
+fpath=(~/.zsh/functions $fpath)
 autoload -Uz compinit
 zstyle ':completion:*' menu select
 zmodload zsh/complist

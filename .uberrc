@@ -1,6 +1,5 @@
 #!/bin/zsh
 
-
 #################
 ####   env   ####
 #################
@@ -105,6 +104,13 @@ dbt () {
 # direnv ------------------------------
 if type "direnv" > /dev/null; then
   eval "$(direnv hook zsh)"
+fi
+
+# -------------------------------------
+# arc/arh -----------------------------
+if [ ! -z $(command -v arh) ] && [ ! -f "$HOME/.zsh/functions/_arh" ]; then 
+	mkdir -p "$HOME/.zsh/functions" && \
+		arh completion zsh > "$HOME/.zsh/functions/_arh"
 fi
 
 # -------------------------------------
