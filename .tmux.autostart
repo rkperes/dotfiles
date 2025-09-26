@@ -1,0 +1,37 @@
+#!/bin/sh
+
+session="autostart"
+
+tmux start-server
+
+# Check if the session exists, discarding output
+# We can check $? for the exit status (zero for success, non-zero for failure)
+tmux has-session -t $session 2>/dev/null
+
+if [ $? = 0 ]; then
+	# Session exists. Early return.
+	echo "Already started."
+	exit 0
+fi
+
+echo "Starting $session..."
+
+tmux new-session -d -s $session
+
+## Uber
+# ulsp
+if [ -f $HOME/run-ulsp.sh ]; then
+	echo "Add ulsp"
+	tmux new-window -t $session -n "ulsp" "$HOME/run-ulsp.sh"
+fi
+
+# scout-hire
+if [ -d $SCOUTHIRE ]; then
+	echo "Start scout-hire specifics"
+	tmux new-window -t $session -n "scouthire_cerberus" "cd $SCOUTHIRE && cerberus --no-status-page --quiet"
+	tmux new-window -t $session -n "scouthire_tunnel" "cd $SCOUTHIRE && echo 'Sleeping waiting for cerberus...' && \
+		sleep 30 && direnv allow && scripts/dbtunnel.sh && read -n 1 -s -r -p 'Press any key to exit'"
+	tmux new-window -t $session -n "scouthire_build" "cd $SCOUTHIRE && make build"
+fi
+
+

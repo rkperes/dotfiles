@@ -158,11 +158,14 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 # bun completions
-[ -s "/Users/rkperes/.bun/_bun" ] && source "/Users/rkperes/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "/Users/rkperes/.bun/_bun"
 
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# tmux
+[ -f "$HOME/.tmux.autostart" ] && $HOME/.tmux.autostart 2>&1 >/dev/null &
 
 # Uber
 [ ! -z "$UBER_LDAP_UID" ] && [ -f $HOME/.uberrc ] && source "$HOME/.uberrc"
