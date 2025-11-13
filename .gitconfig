@@ -1,14 +1,11 @@
-[user]
-	email = rkochp@ext.uber.com
-	name = rkochp
 [core]
 	editor = nvim
 	preloadindex = true
 [alias]
 	s = status
-	ss = s -uno
+	ss = status -uno
 	l = log --pretty=format:'%C(bold yellow)%h%Creset %Cgreen%ad %C(bold)(%ar) %Creset%s %Cblue(%an)' --date=short
-	ls = l -n5
+	ls = log --pretty=format:'%C(bold yellow)%h%Creset %Cgreen%ad %C(bold)(%ar) %Creset%s %Cblue(%an)' --date=short -n5
 	lg1 = log --graph --abbrev-commit --decorate --format=format:'%C(bold yelow)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(auto)%d%C(reset)' --all
 	lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold yelow)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(auto)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)'
 	lg = lg1
@@ -35,7 +32,6 @@
 
 # Uber related
 [commit]
-	gpgsign = false
 [url "ssh://code.uber.internal/"]
 	insteadOf = https://code.uber.internal/
 [url "ssh://config.uber.internal/"]
@@ -45,10 +41,13 @@
 [url "ssh://git@github.com/uber/"]
 	insteadOf = https://github.com/uber/
 [credential "https://git.uberinternal.com"]
-	helper = usso
+	helper = !arh auth git-credential
 [credential "https://vfs4g-cache.uberinternal.com"]
 	helper = usso
 [farc "update"]
 	url = gitolite@code.uber.internal:community/farc
 [farc "upload"]
     add-repo-prefix = false
+[user]
+	name = rkochp
+	email = rkochp@ext.uber.com

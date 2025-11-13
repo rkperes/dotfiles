@@ -7,7 +7,7 @@
 bind-key -r Tab last-window
 #bind-key -r f run-shell "tmux neww tms"
 bind-key -r C-Tab switch-client -l
-bind-key -r n command-prompt -p "New Session:" "new-session -A -s '%%'"
+bind-key -r N command-prompt -p "New Session:" "new-session -A -s '%%'"
 
 # -- session creation ----------------------------------------------------------
 

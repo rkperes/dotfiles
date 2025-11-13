@@ -15,6 +15,16 @@ if [ -d "$HOME/go-code" ]; then
     export SCOUTHIRE="$GOMONOREPO/src/code.uber.internal/people/scout-hire"
     export CAREERS="$GOMONOREPO/src/code.uber.internal/people/careers"
 fi
+# override with sparse
+if [ -d "$HOME/go-code-sparse" ]; then
+    export GOMONOREPO="$HOME/go-code-sparse"
+    export MONOREPO_BASE=$GOMONOREPO
+    export WORKSPACE_ROOT=$GOMONOREPO
+    export UPANEL="$GOMONOREPO/src/code.uber.internal/people/talent/upanel"
+    export SCOUTHIRE="$GOMONOREPO/src/code.uber.internal/people/scout-hire"
+    export CAREERS="$GOMONOREPO/src/code.uber.internal/people/careers"
+fi
+
 
 if [ -d "$HOME/web-code" ]; then
     export WEBMONOREPO="$HOME/web-code"
@@ -29,6 +39,8 @@ fi
 #################
 #### aliases ####
 #################
+
+alias cerb="cd $SCOUTHIRE && cerberus --no-status-page --quiet"
 
 ## upanel
 alias cdup='cd $UPANEL'
@@ -46,6 +58,8 @@ alias shb='(cd $SCOUTHIRE && make build)'
 alias sht='(cd $SCOUTHIRE && make test)'
 alias shrr='(trap "kill 0" SIGINT; cd $SCOUTHIRE && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & wait)'
 alias shr='(trap "kill 0" SIGINT; cd $SCOUTHIRE && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make run)'
+alias shdbint='dbt scout_hire_integration_test primary 17029'
+alias shdbidev='dbt scout_hire_integration primary 17028'
 alias shdbexp='dbt scout_hire_experimental primary 17027'
 alias shdbstag='dbt scout_staging primary 17026'
 alias shdbprod='dbt scout_hire_prod2'
