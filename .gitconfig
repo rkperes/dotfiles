@@ -1,6 +1,7 @@
 [core]
 	editor = nvim
 	preloadindex = true
+	editor = nvim 
 [alias]
 	s = status
 	ss = status -uno
@@ -32,6 +33,8 @@
 
 # Uber related
 [commit]
+[http "https://gopkg.uberinternal.com"]
+	followRedirects = true
 [url "ssh://code.uber.internal/"]
 	insteadOf = https://code.uber.internal/
 [url "ssh://config.uber.internal/"]
@@ -41,6 +44,7 @@
 [url "ssh://git@github.com/uber/"]
 	insteadOf = https://github.com/uber/
 [credential "https://git.uberinternal.com"]
+	helper = 
 	helper = !arh auth git-credential
 [credential "https://vfs4g-cache.uberinternal.com"]
 	helper = usso
@@ -51,3 +55,5 @@
 [user]
 	name = rkochp
 	email = rkochp@ext.uber.com
+[maintenance]
+	repo = /home/user/go-code
