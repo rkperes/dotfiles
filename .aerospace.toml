@@ -9,14 +9,14 @@ after-login-command = []
 # You can use it to add commands that run after AeroSpace startup.
 # 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = ['exec-and-forget sketchybar']
+# after-startup-command = ['exec-and-forget sketchybar']
 
 # Start AeroSpace at login
 start-at-login = true
 
 # Notify Sketchybar about workspace change
 exec-on-workspace-change = ['/bin/bash', '-c',
-  'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE',
+#   'sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE PREV_WORKSPACE=$AEROSPACE_PREV_WORKSPACE',
   'exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=5.0'
 ]
 
@@ -30,12 +30,12 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 accordion-padding = 25 
 
 # Possible values: tiles|accordion
-default-root-container-layout = 'tiles'
+default-root-container-layout = 'accordion'
 
 # Possible values: horizontal|vertical|auto
 # 'auto' means: wide monitor (anything wider than high) gets horizontal orientation,
 #               tall monitor (anything higher than wide) gets vertical orientation
-default-root-container-orientation = 'vertical'
+default-root-container-orientation = 'horizontal'
 
 # Mouse follows focus when focused monitor changes
 # Drop it from your config, if you don't like this behavior
@@ -67,8 +67,8 @@ automatically-unhide-macos-hidden-apps = false
     inner.vertical =   5
     outer.left =       5 
     outer.bottom =     5
-    #outer.top =        [{ monitor.'built-in.*' = 5 }, 30]
-    outer.top =        [{ monitor.'built-in.*' = 30 }, 30]
+    outer.top =        [{ monitor.'built-in.*' = 5 }, 30]
+    # outer.top =        [{ monitor.'built-in.*' = 30 }, 30]
     outer.right =      5
 
 # 'main' binding mode declaration
