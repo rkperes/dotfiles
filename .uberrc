@@ -63,6 +63,9 @@ alias shdbidev='dbt scout_hire_integration primary 17028'
 alias shdbexp='dbt scout_hire_experimental primary 17027'
 alias shdbstag='dbt scout_staging primary 17026'
 alias shdbprod='dbt scout_hire_prod2'
+alias shupexp='upbuild experimental scout-develop'
+alias shupint='upbuild integration scout-integration'
+alias shupidev='upbuild integration-dev scout-integration-dev'
 
 ## web
 alias cdsf='cd $SCOUTFUSION'
@@ -126,6 +129,30 @@ if [ ! -z $(command -v arh) ] && [ ! -f "$HOME/.zsh/functions/_arh" ]; then
 	mkdir -p "$HOME/.zsh/functions" && \
 		arh completion zsh > "$HOME/.zsh/functions/_arh"
 fi
+
+# -------------------------------------
+# Up build ----------------------------
+upbuild() 
+{ 
+	_ENV=${1:-experimental}
+	_BRANCH=${2:-scout-develop}
+	_SERVICE=${3:-scout-hire}
+    echo "Starting build for $_SERVICE $_ENV...";
+	exec 5>&1
+    local output=$(ubuild build create $_SERVICE -b $_BRANCH -t prod -w | tee /dev/fd/5; exit ${PIPESTATUS[0]});
+    local revision_id=$(echo "$output" | grep "Revision ID:" | awk '{print $3}');
+    if [ -n "$revision_id" ]; then
+        echo "";
+        echo "========================================";
+        echo "Build completed! Revision ID: $revision_id";
+        echo "Triggering deployment...";
+        echo "========================================";
+        up compute deploy --service $_SERVICE --environment $_ENV --build-id "$revision_id" --policy non-production;
+    else
+        echo "ERROR: Could not extract Revision ID from build output";
+        return 1;
+    fi
+}
 
 # -------------------------------------
 # fix gdate Uber ---------------------
