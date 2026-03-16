@@ -1,0 +1,5 @@
+git:
+  autoFetch: false
+  autoRefresh: false # Optional, but prevents it from scanning the worktree aggressively when idle
+os:
+  editPreset: 'nvim-remote' # Required to properly embed and edit in neovim

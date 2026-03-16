@@ -54,6 +54,7 @@ alias updbprod='dbt recon primary 17030'
 
 ## scout-hire
 alias cdsh='cd $SCOUTHIRE'
+alias cdshidl='cd ${GOMONOREPO}/idl/code.uber.internal/people/scout-hire'
 alias shb='(cd $SCOUTHIRE && make build)'
 alias sht='(cd $SCOUTHIRE && make test)'
 alias shrr='(trap "kill 0" SIGINT; cd $SCOUTHIRE && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & wait)'
@@ -64,7 +65,7 @@ alias shdbexp='dbt scout_hire_experimental primary 17027'
 alias shdbstag='dbt scout_staging primary 17026'
 alias shdbprod='dbt scout_hire_prod2'
 alias shupexp='upbuild experimental scout-develop'
-alias shupint='upbuild integration scout-integration'
+alias shupint='upbuild integration scout-integration-dev'
 alias shupidev='upbuild integration-dev scout-integration-dev'
 
 ## web
