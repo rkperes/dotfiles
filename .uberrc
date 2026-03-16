@@ -74,6 +74,11 @@ alias cdcf='cd $CAREERSFUSION'
 alias jzf='jz focus'
 alias jzd='jz dev'
 
+## scout-fusion
+alias sfupexp='upbuild experimental scout-develop scout-fusion'
+alias sfupint='upbuild integration scout-integration scout-fusion'
+alias sfupidev='upbuild integration-dev scout-integration scout-fusion'
+
 ## devpod
 alias dp='devpod'
 alias dpgo='ssh -Y $DEVPOD_GO'
