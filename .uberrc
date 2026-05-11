@@ -4,7 +4,7 @@
 ####   env   ####
 #################
 
-export DEVPOD_GO="rkochp-go.devpod-bra"
+export DEVPOD_GO="rkochp-go2.devpod-bra"
 export DEVPOD_WEB="rkochp-web.devpod-bra"
 
 if [ -d "$HOME/go-code" ]; then
