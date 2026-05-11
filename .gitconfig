@@ -20,11 +20,11 @@
 	f = fetch
 	m = merge
 	rb = rebase
-	rbc = rebase --continue
+	rbc = rebase --continue --no-edit
 	rbm = rebase -i origin/main
 	st = stash
 	cp = cherry-pick
-	cpc = cp --continue 
+	cpc = cp --continue --no-edit
 	ama = !git aa && git cia
 [http "https://gopkg.uberinternal.com"]
 	followRedirects = true

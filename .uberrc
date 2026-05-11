@@ -49,8 +49,11 @@ alias upt='(cd $UPANEL && make test)'
 alias uprr='(trap "kill 0" SIGINT; cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make wonka >> /tmp/wonka.log 2>&1 & wait)'
 alias upr='(trap "kill 0" SIGINT; cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make wonka >> /tmp/wonka.log 2>&1 & make MONOREPO_BASE=$GOMONOREPO run)'
 alias upd='(trap "kill 0" SIGINT; cd $UPANEL && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make wonka >> /tmp/wonka.log 2>&1 & make MONOREPO_BASE=$GOMONOREPO debug)'
-alias updbstag='dbt recon1 primary 17031'
-alias updbprod='dbt recon primary 17030'
+alias updbstag='dbt_cerb && dbt recon1 primary 17031'
+alias updbprod='dbt_cerb && dbt recon primary 17030'
+alias updbexp='dbt_cerb && dbt upanel_experimental primary 17032'
+alias updbint='dbt_cerb && dbt upanel_integration_test primary 17033'
+alias updbidev='dbt_cerb && dbt upanel_integration primary 17034'
 
 ## scout-hire
 alias cdsh='cd $SCOUTHIRE'
@@ -59,14 +62,18 @@ alias shb='(cd $SCOUTHIRE && make build)'
 alias sht='(cd $SCOUTHIRE && make test)'
 alias shrr='(trap "kill 0" SIGINT; cd $SCOUTHIRE && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & wait)'
 alias shr='(trap "kill 0" SIGINT; cd $SCOUTHIRE && direnv allow . && eval "$(direnv export bash)" && direnv status && cerberus >> /tmp/cerberus.log 2>&1 & make run)'
-alias shdbint='dbt scout_hire_integration_test primary 17029'
-alias shdbidev='dbt scout_hire_integration primary 17028'
-alias shdbexp='dbt scout_hire_experimental primary 17027'
-alias shdbstag='dbt scout_staging primary 17026'
-alias shdbprod='dbt scout_hire_prod2'
+alias shdbint='dbt_cerb && dbt scout_hire_integration_test primary 17029'
+alias shdbidev='dbt_cerb && dbt scout_hire_integration primary 17028'
+alias shdbexp='dbt_cerb && dbt scout_hire_experimental primary 17027'
+alias shdbstag='dbt_cerb && dbt scout_staging primary 17026'
+alias shdbprod='dbt_cerb && dbt scout_hire_prod2'
 alias shupexp='upbuild experimental scout-develop'
 alias shupint='upbuild integration scout-integration-dev'
 alias shupidev='upbuild integration-dev scout-integration-dev'
+
+## arh
+alias arb='arh rebase --sync'
+alias arp='arh publish --no-interactive --auto-merge-all'
 
 ## web
 alias cdsf='cd $SCOUTFUSION'
@@ -106,6 +113,58 @@ fi
 
 # -------------------------------------
 # database tunnel ---------------------
+#!/bin/bash
+
+dbt_cerb () {
+    (
+	# --- Check if cerberus is already running ---
+        if pgrep -x "cerberus" > /dev/null; then
+            echo "Cerberus is already running. Skipping startup."
+            return 0 
+        fi
+	# ---
+
+	READY_MSG="Open status page"
+	TIMEOUT_SECONDS=300
+	START_TIME=$(date +%s)
+	LOG_FILE=$(mktemp)
+
+	echo "Starting cerberus..."
+
+	cerberus -s grail-deployment-storage --no-status-page > "$LOG_FILE" 2>&1 &
+	CERB_PID=$!
+
+	echo "Waiting for cerberus to be ready..."
+	while true; do
+	    # 1. Check if the success message exists
+	    if grep -q "$READY_MSG" "$LOG_FILE"; then
+		break
+	    fi
+
+	    # 2. Check if cerb process is still running
+	    if ! kill -0 $CERB_PID 2>/dev/null; then
+		echo "Error: cerb process exited unexpectedly."
+		exit 1
+	    fi
+
+	    # 3. Check for timeout
+	    CURRENT_TIME=$(date +%s)
+	    ELAPSED=$(( CURRENT_TIME - START_TIME ))
+
+	    if [ $ELAPSED -ge $TIMEOUT_SECONDS ]; then
+		echo "Error: Timed out waiting for cerb after ${TIMEOUT_SECONDS}s."
+		kill $CERB_PID 2>/dev/null
+		exit 1
+	    fi
+
+	    sleep 2
+	done
+	echo "Cerberus is ready"
+    )
+}
+
+
+# 2. Loop until the success message appears in the log
 TUNNEL_FOR_CLUSTER=$HOME/tunnel_for_cluster.sh 
 dbt () {
 	(
@@ -163,3 +222,9 @@ upbuild()
 # -------------------------------------
 # fix gdate Uber ---------------------
 [ -r "${HOME}"/.profile_lda ] && . "${HOME}"/.profile_lda
+
+# -------------------------------------
+# fix Bazel downloads -----------------
+# On ~/.bazelrc:
+#   common --repo_env=NETRC=/home/user/.netrc
+export NETRC=~/.netrc
