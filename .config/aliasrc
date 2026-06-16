@@ -1,5 +1,10 @@
 alias dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 
+# OpenCode user overlay merges over Uber-managed ~/.config/opencode/opencode.json
+if [ -f "$HOME/.config/opencode/opencode.user.json" ]; then
+	export OPENCODE_CONFIG="$HOME/.config/opencode/opencode.user.json"
+fi
+
 alias nv=nvim
 
 # ls aliases

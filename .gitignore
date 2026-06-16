@@ -1,0 +1,10 @@
+# OpenCode — Uber aifx manages opencode.json/tui/plugins/agents/commands.
+# User prefs live in .config/opencode/opencode.user.json (tracked) via OPENCODE_CONFIG.
+.config/opencode/opencode.json
+.config/opencode/opencode.json.bak
+.config/opencode/tui.json
+.config/opencode/tui.json.bak
+.config/opencode/.aifx-opencode.lock
+.config/opencode/plugins/
+.config/opencode/agents/
+.config/opencode/commands/
