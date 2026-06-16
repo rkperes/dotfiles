@@ -77,6 +77,7 @@ alias arp='arh publish --no-interactive --auto-merge-all'
 
 ## web
 alias cdsf='cd $SCOUTFUSION'
+alias cdupw='cd $UPANELWEB'
 alias cdcf='cd $CAREERSFUSION'
 alias jzf='jz focus'
 alias jzd='jz dev'
