@@ -71,6 +71,8 @@ alias shupexp='upbuild experimental scout-develop'
 alias shupint='upbuild integration scout-integration-dev'
 alias shupidev='upbuild integration-dev scout-integration-dev'
 
+alias dbtall='dbt_cerb && (shdbprod & shdbstag & shdbexp & shdbint & shdbidev & updbprod & updbstag & updbexp & updbint & updbidev)'
+
 ## arh
 alias arb='arh rebase --sync'
 alias arp='arh publish --no-interactive --auto-merge-all'
