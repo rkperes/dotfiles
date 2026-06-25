@@ -4,6 +4,10 @@
 ####   env   ####
 #################
 
+## Jira Epics used in scripts
+export JIRA_EPIC_OMAHA=PEOPLEPROD-26890
+export JIRA_EPIC_KTLO=PEOPLEPROD-28533
+
 export DEVPOD_GO="rkochp-go2.devpod-bra"
 export DEVPOD_WEB="rkochp-web.devpod-bra"
 
@@ -221,6 +225,110 @@ upbuild()
         return 1;
     fi
 }
+
+# -------------------------------------
+# Jira CLI ----------------------------
+jira() {
+  export JIRA_AUTH_TYPE=bearer
+  export JIRA_API_TOKEN="$(usso -ussh jira.uberinternal.com -print 2>/dev/null | tail -1)"
+  command jira "$@"
+}
+
+# ---------------------------------------------------------------------
+# Generic function to create a task under an Epic and assign to a Sprint
+# Arguments: $1 = Sprint ID, $2 = Epic ID, $3 = Summary (Title)
+# ---------------------------------------------------------------------
+jira_self() {
+  local sprint_id="$1"
+  local epic_id="$2"
+  local summary="$3"
+
+  # Validate inputs
+  if [[ -z "$sprint_id" || -z "$epic_id" || -z "$summary" ]]; then
+    echo "❌ Error: jira_self requires a Sprint ID, Epic ID, and Summary." >&2
+    return 1
+  fi
+
+  # Create the issue completely non-interactively
+  # --no-input skips all questions (like Description), choosing defaults/blanks instead
+  local create_out
+  create_out=$(jira issue create \
+    -p PEOPLEPROD \
+    -t Task \
+    -a "$UBER_OWNER" \
+    -P "$epic_id" \
+    -s "$summary" \
+    --no-input)
+
+  if [[ $? -ne 0 ]]; then
+    echo "❌ Error: 'jira issue create' command failed." >&2
+    return 1
+  fi
+
+  echo $create_out
+
+  # Extract the issue key from the raw output string
+  local issue_key
+  issue_key=$(echo "$create_out" | awk -F'/' '/browse/ {print $NF}')
+
+  if [[ -z "$issue_key" ]]; then
+    echo "❌ Error: Failed to parse ISSUE_KEY from output." >&2
+    echo "Jira Output was: $create_out" >&2
+    return 1
+  fi
+
+  # Link the newly created ticket to the active sprint
+  jira sprint add "$sprint_id" "$issue_key"
+}
+
+# ---------------------------------------------------------------------
+# Specific wrapper for Omaha
+# Arguments: $1 = Summary
+# ---------------------------------------------------------------------
+jira_self_omaha() {
+  local summary="$1"
+  
+  if [[ -z "$summary" ]]; then
+    echo "❌ Error: Please provide a summary. Usage: jira_self_omaha \"Your task summary\"" >&2
+    return 1
+  fi
+
+  local omaha_sprint
+  omaha_sprint=$(jira sprint list --state active --plain --table | grep 'Omaha' | awk '{print $1}')
+  
+  if [[ -z "$omaha_sprint" ]]; then
+    echo "❌ Error: Active Omaha sprint not found." >&2
+    return 1
+  fi
+
+  # Pass everything down to the generic builder
+  jira_self "$omaha_sprint" "$JIRA_EPIC_OMAHA" "$summary"
+}
+
+# ---------------------------------------------------------------------
+# Specific wrapper for KTLO
+# Arguments: $1 = Summary
+# ---------------------------------------------------------------------
+jira_self_ktlo() {
+  local summary="$1"
+  
+  if [[ -z "$summary" ]]; then
+    echo "❌ Error: Please provide a summary. Usage: jira_self_ktlo \"Your task summary\"" >&2
+    return 1
+  fi
+
+  local ktlo_sprint
+  ktlo_sprint=$(jira sprint list --state active --plain --table | grep 'TL KTLO' | awk '{print $1}')
+  
+  if [[ -z "$ktlo_sprint" ]]; then
+    echo "❌ Error: Active TL KTLO sprint not found." >&2
+    return 1
+  fi
+
+  # Pass everything down to the generic builder
+  jira_self "$ktlo_sprint" "$JIRA_EPIC_KTLO" "$summary"
+}
+
 
 # -------------------------------------
 # fix gdate Uber ---------------------
