@@ -7,5 +7,5 @@ disable-model-invocation: true
 # use-worktree (alias of use-wt)
 
 This is an alias. Read and follow the canonical skill at
-`~/.agents/skill/use-wt/SKILL.md` and execute that workflow exactly, passing
+`~/.agents/skills/use-wt/SKILL.md` and execute that workflow exactly, passing
 through any argument the user gave (index, branch/path substring, or `release`).
