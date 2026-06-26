@@ -1,5 +1,17 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "slack-mcp": {
+      "type": "local",
+      "command": [
+        "aifx",
+        "mcp",
+        "run",
+        "slack-mcp"
+      ],
+      "enabled": true
+    }
+  },
   "plugin": [
     "./plugins/caveman/plugin.js"
   ]

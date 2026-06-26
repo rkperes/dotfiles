@@ -125,6 +125,13 @@
       "skillPath": "skills/misc/git-guardrails-claude-code/SKILL.md",
       "installedAt": "2026-06-16T17:54:00.000Z",
       "updatedAt": "2026-06-16T17:54:00.000Z"
+    },
+    "tl-weekly-report": {
+      "source": "local",
+      "sourceType": "local",
+      "skillPath": "skills/tl-weekly-report/SKILL.md",
+      "installedAt": "2026-06-26T00:00:00.000Z",
+      "updatedAt": "2026-06-26T00:00:00.000Z"
     }
   },
   "dismissed": {
