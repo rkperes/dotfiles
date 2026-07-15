@@ -1,0 +1,33 @@
+{
+  "model": "sonnet",
+  "effortLevel": "high",
+  "fastMode": false,
+  "permissions": {
+    "allow": [
+      "mcp__api-explorer",
+      "mcp__code-mcp",
+      "mcp__google-mcp",
+      "mcp__jira-mcp",
+      "mcp__logging-mcp",
+      "mcp__monorepo-experts-mcp-server",
+      "mcp__querybi-mcp",
+      "mcp__querybuilder-copilot",
+      "mcp__slack-mcp",
+      "mcp__umetadata",
+      "Bash(grep:*)",
+      "Bash(echo:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(sed:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(gazelle:*)",
+      "mcp__monorepo-experts-mcp-server__generate_standard_go_mocks",
+      "mcp__monorepo-experts-mcp-server__generate_glue_go_mocks",
+      "mcp__monorepo-experts-mcp-server__update_build_files",
+      "mcp__monorepo-experts-mcp-server__get_coverage_report"
+    ],
+    "defaultMode": "auto"
+  }
+}

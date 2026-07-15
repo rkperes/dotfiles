@@ -1,6 +1,6 @@
 ---
 name: use-wt
-description: Select and switch into an existing, manually-created git worktree (reused across tasks) instead of spawning a fresh one. Lists reusable worktrees, prefers ones scoped to the current workspace/cwd (project-level, e.g. ~/repo/src/.../my-project/.worktrees) over repo-root ones, claims one via `git worktree lock` so two agents never collide, moves the agent root into it, and confines ALL further work to that worktree. Use when the user runs /use-wt or /use-worktree, passes /use-wt <index>, or asks to pick / claim / reuse / release an existing worktree without creating a new one.
+description: Select and switch into an existing, manually-created git worktree (reused across tasks) instead of spawning a fresh one. Lists reusable worktrees and picks cheaply from their dir names first — a worktree whose name encodes the current project (e.g. `sh-wt1` for scout-hire) beats a non-correlated one (`up-wt1`) and beats raw git-list order — then falls back to path scope; claims one via `git worktree lock` so two agents never collide, moves the agent root into it, and confines ALL further work to that worktree. Use when the user runs /use-wt or /use-worktree, passes /use-wt <index>, or asks to pick / claim / reuse / release an existing worktree without creating a new one.
 disable-model-invocation: true
 ---
 
@@ -77,6 +77,19 @@ Cursor opens a differently-scoped workspace (the whole monorepo). `OFFSET` lets 
 open the worktree's **equivalent subdir** so the new workspace mirrors the current
 one. See "Workspace scoping" at the end.
 
+Also derive the **project token set** (used for the name-correlation preference in
+Step 3). These are cheap string ops on a name you already have — no filesystem scan:
+
+- `PROJECT` = basename of `WORKSPACE` (e.g. `scout-hire`).
+- Tokens (all lower-cased):
+  - full name — `scout-hire`
+  - de-punctuated — `scouthire` (strip `-`/`_`)
+  - initials of the `-`/`_`-split words — `scout-hire` → `sh`
+  - first word — `scout`
+
+Real-world names often abbreviate to the initials (e.g. `scout-hire` → `sh`,
+`talent-upanel` → `up`), which is why the initials token matters most.
+
 ### 2. List + classify worktrees
 
 Worktrees come from `git worktree list --porcelain` (git's own registry), **not**
@@ -89,8 +102,20 @@ For each record:
 - `branch refs/heads/<name>` → branch (or `detached`)
 - a line starting with `locked` → **claimed**; the rest of that line is the reason.
 
-For each non-main worktree also get its dirty state:
-`git -C <path> status --porcelain | head -1` (non-empty = dirty).
+Also parse each worktree's **dir name** — this is free, the name is already the last
+path segment in the porcelain output, no extra command:
+
+- Split off a trailing index suffix matching `[-_]?(wt)?<digits>$` to get
+  `<prefix>` + `<index>` (e.g. `sh-wt1` → prefix `sh`, index `1`; `up-wt1` → prefix
+  `up`, index `1`; `oracle-hm-validation` → prefix `oracle-hm-validation`, no index).
+- A worktree **name-correlates** to the current project when its `<prefix>` (or the
+  full dir name) matches any token in the project token set from Step 1
+  (case-insensitive; exact or prefix match). Tag it `corr` when it does.
+
+Do the dirty check **last and only if needed** (it's the one heavier call): for the
+worktrees you're actually considering, `git -C <path> status --porcelain | head -1`
+(non-empty = dirty). Skip it for worktrees already excluded by name/scope/claim so a
+long list stays cheap.
 
 **Tag each worktree with its scope depth.** Walk the scope chain from most specific
 to least specific; a worktree's scope = the first chain entry `S` such that its
@@ -98,37 +123,51 @@ abs-path starts with `S/`. A worktree at `WORKSPACE/.worktrees/…` tags to dept
 (in-workspace); one at `REPO_ROOT/.worktrees/…` tags to the last entry (repo-root).
 A worktree under a sibling project (no chain entry is a prefix) is **out-of-scope**.
 
-Present a numbered table of non-main worktrees, sorted by scope depth
-(most-specific scope first), and show the matched scope so the preference is visible:
+Present a numbered table of non-main worktrees, ranked by the Step 3 preference
+(name-correlation first, then scope depth), and show `corr` + matched scope so the
+preference is visible:
 
 ```
-#  path                                              branch      scope          state
-1  /repo/src/.../scout-hire/.worktrees/wt-a          feature/x   workspace      free, clean
-2  /repo/src/.../scout-hire/.worktrees/wt-b          feature/y   workspace      CLAIMED (cursor | 2026-06-22T14:02 | host=mac)
-3  /repo/.worktrees/wt-c                             feature/z   repo-root      free, clean
-4  /repo/src/.../other-team/.worktrees/wt-d          (detached)  out-of-scope   free, dirty
+#  path                                    name    corr  scope       state
+1  /repo/.worktrees/sh-wt1                 sh-wt1  yes   repo-root   free, clean
+2  /repo/.worktrees/sh-wt2                 sh-wt2  yes   repo-root   CLAIMED (cursor | 2026-06-22T14:02 | host=mac)
+3  /repo/src/.../scout-hire/.worktrees/wt  wt      no    workspace   free, clean
+4  /repo/.worktrees/up-wt1                 up-wt1  no    repo-root   free, clean
+5  /repo/src/.../other-team/.worktrees/wt  wt      no    out-scope   free, dirty
 ```
 
-"free" = not locked. "CLAIMED" = locked (show the reason verbatim so stale claims are visible).
+`corr` = dir name encodes the current project (Step 1 tokens). "free" = not locked.
+"CLAIMED" = locked (show the reason verbatim so stale claims are visible).
 
 ### 3. Choose a target
 
-Selection prefers worktrees that match the **most specific** scope (Step 1 chain),
-so an agent working inside a project reuses that project's worktree instead of a
-repo-root one.
+Rank worktrees so the cheapest, strongest signal wins. Ordered preference:
 
-- If an arg was given, resolve it to a single free worktree (by index, branch, or
-  path substring) regardless of scope. If it resolves to a CLAIMED one, stop and
-  report who holds it.
-- No arg → among **free** worktrees, pick from the **most specific scope that has a
-  free worktree**: prefer in-workspace, then each parent scope, then repo-root, and
-  only then out-of-scope. Within the chosen scope, take the lowest index.
-  State clearly what was auto-claimed, the scope it matched, and that others were
-  free (e.g. "Auto-claimed #1 …/scout-hire/.worktrees/wt-a (workspace scope; 3 free
-  total, 2 in-workspace; pass /use-wt <index> to choose).").
-- If the only free worktrees are **out-of-scope** (no chain match), do **not**
-  auto-claim — list them and ask the user to confirm, since the user is likely
-  working in a different project than where those worktrees live.
+1. **Name-correlation (`corr`)** — a worktree whose dir name encodes the current
+   project (Step 1 tokens; e.g. `sh-wt1` for scout-hire) beats a non-correlated one
+   (`up-wt1`) and beats raw git-list order. This is the cheapest signal (pure string
+   match on names already in the porcelain output) and the clearest statement of
+   intent, so it ranks first.
+2. **Scope depth** — among worktrees with equal correlation, prefer the most specific
+   scope (in-workspace, then each parent, then repo-root, then out-of-scope). This is
+   the tie-break *within* a correlation tier, not an override of it — a name-correlated
+   repo-root worktree still outranks a non-correlated in-workspace one.
+3. **Lowest parsed `<index>`** (then lowest table row) — final tie-break, so `sh-wt1`
+   is chosen before `sh-wt2`.
+
+Apply it:
+
+- If an arg was given, resolve it to a single free worktree — a **numeric arg is a
+  table row** from Step 2, otherwise match on branch, dir name, or path substring —
+  regardless of correlation/scope. If it resolves to a CLAIMED one, stop and report
+  who holds it.
+- No arg → pick the top-ranked **free** worktree by the order above. State clearly
+  what was auto-claimed and why it ranked first (e.g. "Auto-claimed #1
+  …/.worktrees/sh-wt1 — name matches project `scout-hire` (token `sh`); 3 free total,
+  1 name-correlated; pass /use-wt <index> to choose.").
+- **No name-correlated and no in/parent-scope free worktrees** (only non-correlated
+  repo-root or out-of-scope remain) → do **not** auto-claim. List them and ask the
+  user to confirm, since none clearly belongs to the current project.
 - **No free worktrees** → show the claimed table with reasons/timestamps and ask
   the user whether to force-release a stale claim (`git worktree unlock <path>`).
   Never silently steal a claim.

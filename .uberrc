@@ -8,6 +8,13 @@
 export JIRA_EPIC_OMAHA=PEOPLEPROD-26890
 export JIRA_EPIC_KTLO=PEOPLEPROD-28533
 
+## Claude Code default model.
+## `aifx agent run claude` rewrites ~/.claude/settings.json every launch and
+## forces "model": "sonnet". Precedence is: --model flag > ANTHROPIC_MODEL >
+## settings.json, and aifx never sets ANTHROPIC_MODEL, so this makes Opus 4.8
+## the persistent default. (Note: opencode also reads ANTHROPIC_MODEL.)
+export ANTHROPIC_MODEL="claude-opus-4-8[1m]"
+
 export DEVPOD_GO="rkochp-go2.devpod-bra"
 export DEVPOD_WEB="rkochp-web.devpod-bra"
 
