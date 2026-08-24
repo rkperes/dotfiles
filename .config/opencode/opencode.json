@@ -11,7 +11,7 @@
       "permission": {
         "edit": "deny"
       },
-      "prompt": "{file:$HOME/.config/opencode/prompts/verify.txt}"
+      "prompt": "{file:prompts/verify.txt}"
     }
   },
   "autoupdate": false,
@@ -506,7 +506,15 @@
       "/Users/rkochp/.local/share/aifx/opencode-skills-prefixed/personal",
       "/Users/rkochp/.local/share/aifx/opencode-skills-prefixed/slack",
       "/Users/rkochp/.local/share/aifx/opencode-skills-prefixed/uber-dev",
-      "/Users/rkochp/.local/share/aifx/opencode-skills-prefixed/uber-reviewer"
+      "/Users/rkochp/.local/share/aifx/opencode-skills-prefixed/uber-reviewer",
+      "/home/user/.local/share/aifx/opencode-skills-prefixed/agent-guard",
+      "/home/user/.local/share/aifx/opencode-skills-prefixed/code-mode",
+      "/home/user/.local/share/aifx/opencode-skills-prefixed/cost-check",
+      "/home/user/.local/share/aifx/opencode-skills-prefixed/data-analyst",
+      "/home/user/.local/share/aifx/opencode-skills-prefixed/personal",
+      "/home/user/.local/share/aifx/opencode-skills-prefixed/slack",
+      "/home/user/.local/share/aifx/opencode-skills-prefixed/uber-dev",
+      "/home/user/.local/share/aifx/opencode-skills-prefixed/uber-reviewer"
     ]
   },
   "small_model": "fireworks/kimi-k2.7-code-fast"
