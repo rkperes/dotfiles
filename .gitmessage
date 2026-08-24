@@ -1,39 +1,40 @@
-[scout-hire] 
+[scout-hire] <TITLE>
 
-Summary: 
+Summary:
 
 **What's the change?**
 
+<WHAT>
+
 **Why is it needed?**
+
+<WHY>
 
 Risk Level [Required]
 
-- [ ] HIGH – Foundational/Fwk change affecting core business functionalities 
-- [ ] MED – Changes affecting user experience 
-- [ ] LOW – No changes to existing behavior 
-
+<Mark the selected level with ☑, leave the others as ☐>
+☐ HIGH – Foundational/Fwk change affecting core business functionalities
+☐ MED – Changes affecting user experience
+☐ LOW – No changes to existing behavior
 
 Test Plan:
 
 ### Unit tests
 
 Affected packages:
-- 
+- <PKG>
 
-Ensure no flaky tests or race conditions (replace `<PACKAGE_NAME>` with the package above, and run it from the project folder):
-- [ ] bazel test --test_env=GO_TEST_WRAP_TESTV=1 --@io_bazel_rules_go//go/config:race <PACKAGE_NAME>:all
-- [ ] bazel test --runs_per_test=50 --test_timeout=7200 <PACKAGE_NAME>:all
-
-Once run for all packages, check both boxes.
-
+Ran from the project folder (☑ passed · ⚠ skipped / needs attention):
+☑ bazel test --test_env=GO_TEST_WRAP_TESTV=1 --@io_bazel_rules_go//go/config:race <PKG>:all
+☑ bazel test --runs_per_test=50 --test_timeout=7200 <PKG>:all
 
 ### Tests in deployed service (experimental/integration)
 
-**⏱️ Latest test:** 
-2025-01-01 13:00:00 BRT
+**⏱️ Latest test:**
+<NOW: prefill with `TZ='America/Sao_Paulo' date '+%Y-%m-%d %H:%M:%S BRT'`; user updates after testing>
 
 **🚢 Changes deployed in:**
-[]() 
+[]()
 
 **Test Setup:**
 
@@ -42,5 +43,4 @@ Once run for all packages, check both boxes.
 
 Jira Issues:
 
-JIRA-
-
+<JIRA-KEY>

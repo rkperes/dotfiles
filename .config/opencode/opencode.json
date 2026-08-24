@@ -11,7 +11,7 @@
       "permission": {
         "edit": "deny"
       },
-      "prompt": "{file:/Users/rkochp/.config/opencode/prompts/verify.txt}"
+      "prompt": "{file:$HOME/.config/opencode/prompts/verify.txt}"
     }
   },
   "autoupdate": false,
@@ -55,6 +55,17 @@
         "run",
         "--install",
         "jira-mcp"
+      ],
+      "enabled": true,
+      "type": "local"
+    },
+    "logging-mcp": {
+      "command": [
+        "aifx",
+        "mcp",
+        "run",
+        "--install",
+        "logging-mcp"
       ],
       "enabled": true,
       "type": "local"

@@ -55,8 +55,8 @@
     add-repo-prefix = false
 [maintenance]
 	repo = /home/user/go-code
+[maintenance]
+	repo = /home/user/go-code
 [user]
 	name = rkochp
 	email = rkochp@ext.uber.com
-[maintenance]
-	repo = /home/user/go-code

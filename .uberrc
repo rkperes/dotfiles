@@ -52,6 +52,7 @@ fi
 #################
 
 alias cerb="cd $SCOUTHIRE && cerberus --no-status-page --quiet"
+alias claude='aifx agent run claude'
 
 ## upanel
 alias cdup='cd $UPANEL'
@@ -181,6 +182,22 @@ dbt_cerb () {
 # 2. Loop until the success message appears in the log
 TUNNEL_FOR_CLUSTER=$HOME/tunnel_for_cluster.sh 
 dbt () {
+	(
+		trap "kill 0" SIGINT
+		echo "usage dbt <db> <role> <port>"
+		DB="${1-scout_hire_prod2}"
+		ROLE="${2-primary}"
+		PORT="${3-17025}"
+		storage credential --ro -t soadbmysql -i ${DB} -d ${DB}
+		echo "Connecting to DB: ${DB} as ROLE: ${ROLE} on PORT: ${PORT}"
+		# cerberus -s grail-deployment-storage --no-status-page --quiet &
+		# sleep 15
+		$TUNNEL_FOR_CLUSTER $DB $ROLE $PORT
+		echo "all done"
+	)
+}
+
+dbtw () {
 	(
 		trap "kill 0" SIGINT
 		echo "usage dbt <db> <role> <port>"
@@ -338,7 +355,7 @@ jira_self_ktlo() {
 
 
 # -------------------------------------
-# fix gdate Uber ---------------------
+# fix gdate uber ---------------------
 [ -r "${HOME}"/.profile_lda ] && . "${HOME}"/.profile_lda
 
 # -------------------------------------
@@ -346,7 +363,6 @@ jira_self_ktlo() {
 # On ~/.bazelrc:
 #   common --repo_env=NETRC=/home/user/.netrc
 export NETRC=~/.netrc
-
 
 # -------------------------------------
 # TL decoupled Slack sweep (ADR-0006) — morning delta on ussh + manual EOD backup.
@@ -363,3 +379,14 @@ ussh_bgjobs() {
 alias ussh='ussh_bgjobs'
 # Manual EOD backup for early-leave days (the 19:00 launchd is the default trigger).
 alias sweep-now='( cd "$HOME/src/agents" && nohup ./scripts/sweep-run.sh eod >/dev/null 2>&1 & ) ; echo "→ tl EOD sweep started in background"'
+
+# -------------------------------------
+# fix agents stale sessions -----------
+# Run Claude via AIFx (if you don't already)
+# Quick helper to mint a fresh Artifactory token inside the current shell
+artifacts-login() {
+  # Mint token from current uSSH cert; same pattern internal tools use
+  export ARTIFACTORY_TOKEN="$(usso -ussh artifacts -print 2>/dev/null)"
+  export USSO_TOKEN="$ARTIFACTORY_TOKEN"  # for tools that check USSO_TOKEN
+  echo "Artifactory token refreshed for this shell."
+}
