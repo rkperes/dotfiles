@@ -61,6 +61,15 @@ curl -sS -X POST -H "Content-Type: application/json" \
   -d '{"message": "your text here"}' "$SLACK_NOTIFY_WEBHOOK_URL"
 ```
 
+## Auto-notify (hooks)
+
+This skill is also driven automatically by Claude Code hooks (in
+`~/.claude/settings.local.json`), tuned **low-noise**: you're pinged only when
+you've gone **idle** ("come back"), when a **run took 1 min+** (`Stop` gated by a
+`UserPromptSubmit` start-stamp), or when a **background agent finishes**. Glue:
+`scripts/hook-notify.sh` + `scripts/hook-timer.sh`. Threshold override:
+`SLACK_NOTIFY_LONGRUN_S`. See [HOOKS.md](HOOKS.md) for the event map and rollback.
+
 ## Rules
 
 - Only alter the value of `message`; keep the JSON shape `{"message": "..."}`.

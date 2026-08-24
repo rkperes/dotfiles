@@ -1,6 +1,6 @@
 #!/bin/sh
 
-session="autostart"
+session="auto"
 
 tmux start-server
 
@@ -18,20 +18,20 @@ echo "Starting $session..."
 
 tmux new-session -d -s $session
 
-## Uber
-# ulsp
-if [ -f $HOME/run-ulsp.sh ]; then
-	echo "Add ulsp"
-	tmux new-window -t $session -n "ulsp" "$HOME/run-ulsp.sh"
-fi
-
-# scout-hire
-if [ -d $SCOUTHIRE ]; then
-	echo "Start scout-hire specifics"
-	tmux new-window -t $session -n "scouthire_cerberus" "cd $SCOUTHIRE && cerberus --no-status-page --quiet"
-	tmux new-window -t $session -n "scouthire_tunnel" "cd $SCOUTHIRE && echo 'Sleeping waiting for cerberus...' && \
-		sleep 30 && direnv allow && scripts/dbtunnel.sh && read -n 1 -s -r -p 'Press any key to exit'"
-	tmux new-window -t $session -n "scouthire_build" "cd $SCOUTHIRE && make build"
-fi
+# ## Uber
+# # ulsp
+# if [ -f $HOME/run-ulsp.sh ]; then
+# 	echo "Add ulsp"
+# 	tmux new-window -t $session -n "ulsp" "$HOME/run-ulsp.sh"
+# fi
+#
+# # scout-hire
+# if [ -d $SCOUTHIRE ]; then
+# 	echo "Start scout-hire specifics"
+# 	tmux new-window -t $session -n "scouthire_cerberus" "cd $SCOUTHIRE && cerberus --no-status-page --quiet"
+# 	tmux new-window -t $session -n "scouthire_tunnel" "cd $SCOUTHIRE && echo 'Sleeping waiting for cerberus...' && \
+# 		sleep 30 && direnv allow && scripts/dbtunnel.sh && read -n 1 -s -r -p 'Press any key to exit'"
+# 	tmux new-window -t $session -n "scouthire_build" "cd $SCOUTHIRE && make build"
+# fi
 
 

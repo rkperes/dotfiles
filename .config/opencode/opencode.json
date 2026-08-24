@@ -1,28 +1,502 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "plan": {
+      "model": "anthropic/claude-opus-4-6"
+    },
+    "verify": {
+      "description": "Verification model — reviews and validates changes against the task.",
+      "mode": "primary",
+      "model": "openai/gpt-5.5",
+      "permission": {
+        "edit": "deny"
+      },
+      "prompt": "{file:/Users/rkochp/.config/opencode/prompts/verify.txt}"
+    }
+  },
+  "autoupdate": false,
+  "compaction": {
+    "auto": true,
+    "prune": true,
+    "reserved": 600000
+  },
+  "enabled_providers": [
+    "anthropic",
+    "openai",
+    "fireworks",
+    "google"
+  ],
   "mcp": {
+    "code-mcp": {
+      "command": [
+        "aifx",
+        "mcp",
+        "run",
+        "--install",
+        "code-mcp"
+      ],
+      "enabled": true,
+      "type": "local"
+    },
     "google-mcp": {
-      "type": "local",
       "command": [
         "aifx",
         "mcp",
         "run",
         "google-mcp"
       ],
-      "enabled": true
+      "enabled": true,
+      "type": "local"
+    },
+    "jira-mcp": {
+      "command": [
+        "aifx",
+        "mcp",
+        "run",
+        "--install",
+        "jira-mcp"
+      ],
+      "enabled": true,
+      "type": "local"
     },
     "slack-mcp": {
-      "type": "local",
       "command": [
         "aifx",
         "mcp",
         "run",
         "slack-mcp"
       ],
-      "enabled": true
+      "enabled": true,
+      "type": "local"
     }
   },
+  "model": "anthropic/claude-sonnet-5",
   "plugin": [
     "./plugins/caveman/plugin.js"
-  ]
+  ],
+  "provider": {
+    "anthropic": {
+      "models": {
+        "claude-fable-5": {
+          "cost": {
+            "cache_read": 1,
+            "cache_write": 12.5,
+            "input": 10,
+            "output": 50
+          },
+          "name": "Claude Fable 5"
+        },
+        "claude-opus-4-6": {
+          "cost": {
+            "cache_read": 0.5,
+            "cache_write": 6.25,
+            "input": 5,
+            "output": 25
+          },
+          "name": "Planning Model: Claude Opus 4.6"
+        },
+        "claude-opus-5": {
+          "cost": {
+            "cache_read": 0.5,
+            "cache_write": 6.25,
+            "input": 5,
+            "output": 25
+          },
+          "name": "Claude Opus 5",
+          "variants": {
+            "high": {
+              "options": {
+                "reasoningEffort": "high"
+              }
+            },
+            "low": {
+              "options": {
+                "reasoningEffort": "low"
+              }
+            },
+            "max": {
+              "options": {
+                "reasoningEffort": "max"
+              }
+            },
+            "medium": {
+              "options": {
+                "reasoningEffort": "medium"
+              }
+            },
+            "xhigh": {
+              "options": {
+                "reasoningEffort": "xhigh"
+              }
+            }
+          }
+        },
+        "claude-sonnet-4-6": {
+          "cost": {
+            "cache_read": 0.3,
+            "cache_write": 3.75,
+            "input": 3,
+            "output": 15
+          },
+          "name": "Claude Sonnet 4.6"
+        },
+        "claude-sonnet-5": {
+          "cost": {
+            "cache_read": 0.2,
+            "cache_write": 2.5,
+            "input": 2,
+            "output": 10
+          },
+          "name": "Claude Sonnet 5"
+        }
+      },
+      "options": {
+        "apiKey": "usso-managed-token",
+        "baseURL": "https://genai-api.uberinternal.com/v1",
+        "chunkTimeout": 30000,
+        "headers": {
+          "OpenAI-Organization": "7f16e5ad-3a7c-4a43-93e6-9ed48a74d96e"
+        }
+      },
+      "whitelist": [
+        "claude-fable-5",
+        "claude-opus-4-6",
+        "claude-opus-5",
+        "claude-sonnet-4-6",
+        "claude-sonnet-5"
+      ]
+    },
+    "fireworks": {
+      "models": {
+        "deepseek-v4-flash-0731": {
+          "cost": {
+            "cache_read": 0.028,
+            "input": 0.14,
+            "output": 0.28
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 384000
+          },
+          "modalities": {
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "name": "DeepSeek V4 Flash",
+          "reasoning": true,
+          "variants": {
+            "high": {
+              "options": {
+                "reasoningEffort": "high"
+              }
+            },
+            "low": {
+              "options": {
+                "reasoningEffort": "low"
+              }
+            },
+            "max": {
+              "options": {
+                "reasoningEffort": "max"
+              }
+            }
+          }
+        },
+        "deepseek-v4-pro": {
+          "cost": {
+            "cache_read": 0.174,
+            "input": 1.74,
+            "output": 3.48
+          },
+          "limit": {
+            "context": 1000000,
+            "output": 384000
+          },
+          "modalities": {
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "name": "DeepSeek V4 Pro"
+        },
+        "glm-5.2-fast": {
+          "cost": {
+            "cache_read": 0.21,
+            "input": 2.1,
+            "output": 6.6
+          },
+          "limit": {
+            "context": 1048575,
+            "output": 131072
+          },
+          "modalities": {
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "name": "Execution Model: GLM 5.2 Fast"
+        },
+        "kimi-k2.7-code-fast": {
+          "cost": {
+            "cache_read": 0.38,
+            "input": 1.9,
+            "output": 8
+          },
+          "limit": {
+            "context": 262000,
+            "output": 262000
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "name": "Execution Model: Kimi K2.7 Fast"
+        },
+        "kimi-k3": {
+          "cost": {
+            "cache_read": 0.3,
+            "input": 3,
+            "output": 15
+          },
+          "limit": {
+            "context": 1048576,
+            "output": 131072
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "name": "Kimi K3",
+          "reasoning": true,
+          "variants": {
+            "high": {
+              "options": {
+                "reasoningEffort": "high"
+              }
+            },
+            "low": {
+              "options": {
+                "reasoningEffort": "low"
+              }
+            },
+            "max": {
+              "options": {
+                "reasoningEffort": "max"
+              }
+            },
+            "medium": {
+              "options": {
+                "reasoningEffort": "medium"
+              }
+            }
+          }
+        },
+        "kimi-k3-fast": {
+          "cost": {
+            "cache_read": 0.45,
+            "input": 4.5,
+            "output": 22.5
+          },
+          "limit": {
+            "context": 1048576,
+            "output": 131072
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "name": "Kimi K3 Fast",
+          "reasoning": true,
+          "variants": {
+            "high": {
+              "options": {
+                "reasoningEffort": "high"
+              }
+            },
+            "low": {
+              "options": {
+                "reasoningEffort": "low"
+              }
+            },
+            "max": {
+              "options": {
+                "reasoningEffort": "max"
+              }
+            },
+            "medium": {
+              "options": {
+                "reasoningEffort": "medium"
+              }
+            }
+          }
+        },
+        "qwen3p7-plus": {
+          "cost": {
+            "cache_read": 0.08,
+            "input": 0.4,
+            "output": 1.6
+          },
+          "limit": {
+            "context": 262144,
+            "output": 65536
+          },
+          "modalities": {
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
+          },
+          "name": "Qwen 3.7 Plus"
+        }
+      },
+      "options": {
+        "apiKey": "usso-managed-token",
+        "baseURL": "https://genai-api.uberinternal.com/v1",
+        "chunkTimeout": 30000,
+        "headers": {
+          "OpenAI-Organization": "7f16e5ad-3a7c-4a43-93e6-9ed48a74d96e"
+        }
+      },
+      "whitelist": [
+        "glm-5.2-fast",
+        "kimi-k2.7-code-fast",
+        "kimi-k3",
+        "kimi-k3-fast",
+        "qwen3p7-plus",
+        "deepseek-v4-pro",
+        "deepseek-v4-flash-0731"
+      ]
+    },
+    "google": {
+      "models": {
+        "gemini-3.5-flash": {
+          "cost": {
+            "cache_read": 0.5,
+            "input": 5,
+            "output": 30
+          },
+          "name": "Gemini 3.5 Flash"
+        }
+      },
+      "options": {
+        "apiKey": "usso-managed-token",
+        "baseURL": "https://genai-api.uberinternal.com/v1",
+        "chunkTimeout": 30000,
+        "headers": {
+          "OpenAI-Organization": "7f16e5ad-3a7c-4a43-93e6-9ed48a74d96e"
+        }
+      },
+      "whitelist": [
+        "gemini-3.5-flash"
+      ]
+    },
+    "openai": {
+      "models": {
+        "gpt-5.5": {
+          "cost": {
+            "cache_read": 0.5,
+            "input": 5,
+            "output": 30
+          },
+          "name": "Verification Model: GPT 5.5",
+          "reasoning": true
+        },
+        "gpt-5.6-luna": {
+          "cost": {
+            "cache_read": 0.02,
+            "cache_write": 0.25,
+            "input": 0.2,
+            "output": 1.2
+          },
+          "name": "GPT 5.6 Luna",
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "reasoning": true
+        },
+        "gpt-5.6-sol": {
+          "cost": {
+            "cache_read": 0.5,
+            "cache_write": 6.25,
+            "input": 5,
+            "output": 30
+          },
+          "name": "GPT 5.6 Sol",
+          "options": {
+            "reasoningEffort": "medium"
+          },
+          "reasoning": true
+        },
+        "gpt-5.6-terra": {
+          "cost": {
+            "cache_read": 0.2,
+            "cache_write": 2.5,
+            "input": 2,
+            "output": 12
+          },
+          "name": "GPT 5.6 Terra",
+          "options": {
+            "reasoningEffort": "high"
+          },
+          "reasoning": true
+        }
+      },
+      "options": {
+        "apiKey": "usso-managed-token",
+        "baseURL": "https://genai-api.uberinternal.com/v1",
+        "chunkTimeout": 30000,
+        "headers": {
+          "OpenAI-Organization": "7f16e5ad-3a7c-4a43-93e6-9ed48a74d96e"
+        }
+      },
+      "whitelist": [
+        "gpt-5.5",
+        "gpt-5.6-terra",
+        "gpt-5.6-luna",
+        "gpt-5.6-sol"
+      ]
+    }
+  },
+  "share": "disabled",
+  "skills": {
+    "paths": [
+      "/Users/rkochp/.local/share/aifx/opencode-skills-prefixed/agent-guard",
+      "/Users/rkochp/.local/share/aifx/opencode-skills-prefixed/code-mode",
+      "/Users/rkochp/.local/share/aifx/opencode-skills-prefixed/cost-check",
+      "/Users/rkochp/.local/share/aifx/opencode-skills-prefixed/data-analyst",
+      "/Users/rkochp/.local/share/aifx/opencode-skills-prefixed/personal",
+      "/Users/rkochp/.local/share/aifx/opencode-skills-prefixed/slack",
+      "/Users/rkochp/.local/share/aifx/opencode-skills-prefixed/uber-dev",
+      "/Users/rkochp/.local/share/aifx/opencode-skills-prefixed/uber-reviewer"
+    ]
+  },
+  "small_model": "fireworks/kimi-k2.7-code-fast"
 }

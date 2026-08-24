@@ -1,5 +1,6 @@
 {
-  "model": "sonnet",
+  "theme": "dark",
+  "model": "claude-opus-4-8[1m]",
   "effortLevel": "high",
   "fastMode": false,
   "permissions": {
@@ -29,5 +30,55 @@
       "mcp__monorepo-experts-mcp-server__get_coverage_report"
     ],
     "defaultMode": "auto"
+  },
+  "hooks": {
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 10,
+            "command": "$HOME/.claude/skills/slack-notify/scripts/hook-notify.sh 'idle - come back'"
+          }
+        ],
+        "matcher": "idle_prompt"
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 10,
+            "command": "$HOME/.claude/skills/slack-notify/scripts/hook-notify.sh 'bg agent done'"
+          }
+        ],
+        "matcher": "agent_completed"
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 10,
+            "command": "$HOME/.claude/skills/slack-notify/scripts/hook-timer.sh start"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "async": true,
+            "timeout": 10,
+            "command": "$HOME/.claude/skills/slack-notify/scripts/hook-timer.sh stop"
+          }
+        ]
+      }
+    ]
   }
 }

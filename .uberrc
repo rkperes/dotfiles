@@ -346,3 +346,20 @@ jira_self_ktlo() {
 # On ~/.bazelrc:
 #   common --repo_env=NETRC=/home/user/.netrc
 export NETRC=~/.netrc
+
+
+# -------------------------------------
+# TL decoupled Slack sweep (ADR-0006) — morning delta on ussh + manual EOD backup.
+# ussh_bgjobs runs the REAL ussh, then on success backgrounds the delta sweep with the FRESH cert.
+# `command ussh` bypasses this alias+function (no recursion).
+ussh_bgjobs() {
+  command ussh "$@"
+  local rc=$?
+  [ $rc -ne 0 ] && return $rc
+  ( cd "$HOME/src/agents" && nohup ./scripts/sweep-run.sh delta >/dev/null 2>&1 & )
+  echo "→ tl morning delta sweep started in background (log: state/sweep/logs/$(date +%F).delta.log)"
+  return 0
+}
+alias ussh='ussh_bgjobs'
+# Manual EOD backup for early-leave days (the 19:00 launchd is the default trigger).
+alias sweep-now='( cd "$HOME/src/agents" && nohup ./scripts/sweep-run.sh eod >/dev/null 2>&1 & ) ; echo "→ tl EOD sweep started in background"'
