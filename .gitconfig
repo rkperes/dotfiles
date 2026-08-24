@@ -21,7 +21,7 @@
 	f = fetch
 	m = merge
 	rb = rebase
-	rbc = rebase --continue --no-edit
+	rbc = rebase --continue
 	rbm = rebase -i origin/main
 	st = stash
 	cp = cherry-pick
