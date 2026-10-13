@@ -47,5 +47,8 @@
       }
     }
   },
-  "plugins": ["./plugins/caveman/plugin.js"]
+  "plugins": [
+    "./plugins/caveman/plugin.js",
+    "superpowers@git+https://github.com/obra/superpowers.git"
+  ]
 }
