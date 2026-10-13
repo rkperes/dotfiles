@@ -145,7 +145,7 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 # tmux
-[ -f "$HOME/.tmux.autostart" ] && $HOME/.tmux.autostart 2>&1 >/dev/null &
+# [ -f "$HOME/.tmux.autostart" ] && $HOME/.tmux.autostart 2>&1 >/dev/null &
 
-# Uber
-[ ! -z "$UBER_LDAP_UID" ] && [ -f $HOME/.uberrc ] && source "$HOME/.uberrc"
+# direnv — per-directory environment
+eval "$(direnv hook zsh)"
