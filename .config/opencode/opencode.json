@@ -1,23 +1,51 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "model": "deepseek/deepseek-v4-pro",
-  "small_model": "deepseek/deepseek-v4-flash",
   "share": "disabled",
-  "compaction": { "auto": true, "prune": true, "reserved": 600000 },
-  "agent": { "plan": { "model": "deepseek/deepseek-v4-pro" } },
-  "provider": {
+  "compaction": {
+    "auto": true,
+    "buffer": 600000
+  },
+  "experimental": {
+    "policies": [
+      { "action": "provider.use", "resource": "opencode", "effect": "deny" }
+    ]
+  },
+  "agents": {
+    "title": { "model": "deepseek/deepseek-v4-flash" },
+    "build": { "model": "deepseek/deepseek-v4-pro#low" },
+    "plan": { "model": "deepseek/deepseek-v4-pro#high" }
+  },
+  "providers": {
     "deepseek": {
-      "npm": "@ai-sdk/openai-compatible",
+      "package": "@opencode/ai/providers/openai-compatible",
       "name": "DeepSeek",
-      "options": { "baseURL": "https://api.deepseek.com", "apiKey": "{env:DEEPSEEK_API_KEY}" },
-      "models": { "deepseek-chat": { "name": "DeepSeek Chat" } }
+      "settings": {
+        "baseURL": "https://api.deepseek.com",
+        "apiKey": "{env:DEEPSEEK_API_KEY}"
+      },
+      "models": {
+        "deepseek-chat": { "name": "DeepSeek Chat" },
+        "deepseek-v4-pro": {
+          "variants": [
+            { "id": "low", "body": { "reasoning_effort": "low" } },
+            { "id": "high", "body": { "reasoning_effort": "high" } }
+          ]
+        }
+      }
     },
     "z.ai": {
-      "npm": "@ai-sdk/openai-compatible",
+      "package": "@opencode/ai/providers/openai-compatible",
       "name": "Z.ai",
-      "options": { "baseURL": "https://api.z.ai/api/enc/v1", "apiKey": "{env:ZAI_API_KEY}" },
-      "models": { "glm-4.6": { "name": "GLM-4.6" }, "glm-4.5": { "name": "GLM-4.5" } }
+      "settings": {
+        "baseURL": "https://api.z.ai/api/paas/v4",
+        "apiKey": "{env:ZAI_API_KEY}"
+      },
+      "models": {
+        "glm-4.6": { "name": "GLM-4.6" },
+        "glm-4.5": { "name": "GLM-4.5" }
+      }
     }
   },
-  "plugin": ["./plugins/caveman/plugin.js"]
+  "plugins": ["./plugins/caveman/plugin.js"]
 }

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "deepseek/deepseek-v4-pro",
+  "small_model": "deepseek/deepseek-v4-flash",
+  "share": "disabled",
+  "disabled_providers": ["opencode"],
+  "compaction": { "auto": true, "prune": true, "reserved": 600000 },
+  "agent": {
+    "build": { "model": "deepseek/deepseek-v4-pro" },
+    "plan": { "model": "z.ai/glm-4.6" }
+  },
+  "provider": {
+    "deepseek": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "DeepSeek",
+      "options": { "baseURL": "https://api.deepseek.com", "apiKey": "{env:DEEPSEEK_API_KEY}" },
+      "models": { "deepseek-chat": { "name": "DeepSeek Chat" } }
+    },
+    "z.ai": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Z.ai",
+      "options": { "baseURL": "https://api.z.ai/api/paas/v4", "apiKey": "{env:ZAI_API_KEY}" },
+      "models": { "glm-4.6": { "name": "GLM-4.6" }, "glm-4.5": { "name": "GLM-4.5" } }
+    }
+  },
+  "plugin": ["./plugins/caveman/plugin.js"]
+}
